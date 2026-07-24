@@ -1,0 +1,557 @@
+openapi: 3.1.0
+info:
+  title: ReasonBlocks Billing Codebase Findings API
+  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
+
+
+    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
+
+
+    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  version: 0.1.0
+tags:
+- name: Codebase Findings
+paths:
+  /v1/findings/{codebase_id}:
+    post:
+      tags:
+      - Codebase Findings
+      summary: Store Finding
+      operationId: store_finding_v1_findings__codebase_id__post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: codebase_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Codebase Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingStoreRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingStoreResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Codebase Findings
+      summary: List Findings
+      operationId: list_findings_v1_findings__codebase_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: codebase_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Codebase Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Codebase Findings
+      summary: Clear Findings
+      operationId: clear_findings_v1_findings__codebase_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: codebase_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Codebase Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Clear Findings V1 Findings  Codebase Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/findings/{codebase_id}/search:
+    post:
+      tags:
+      - Codebase Findings
+      summary: Search Findings
+      operationId: search_findings_v1_findings__codebase_id__search_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: codebase_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Codebase Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingSearchRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingSearchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/findings/{codebase_id}/{finding_id}:
+    delete:
+      tags:
+      - Codebase Findings
+      summary: Delete Finding
+      description: Delete a single finding by id.
+      operationId: delete_finding_v1_findings__codebase_id___finding_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: codebase_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Codebase Id
+      - name: finding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Finding Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Delete Finding V1 Findings  Codebase Id   Finding Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Codebase Findings
+      summary: Patch Finding
+      description: 'Update a single finding''s content/file_path/finding_type. If content
+
+        changes, the embedding is recomputed so search stays consistent.'
+      operationId: patch_finding_v1_findings__codebase_id___finding_id__patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: codebase_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Codebase Id
+      - name: finding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Finding Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingPatch'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Patch Finding V1 Findings  Codebase Id   Finding Id  Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/findings/{codebase_id}/invalidate:
+    post:
+      tags:
+      - Codebase Findings
+      summary: Invalidate Findings
+      operationId: invalidate_findings_v1_findings__codebase_id__invalidate_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: codebase_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Codebase Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingInvalidateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindingInvalidateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/findings:
+    get:
+      tags:
+      - Codebase Findings
+      summary: List Codebases
+      description: 'List every codebase the principal can see.
+
+
+        Per-customer keys see only codebases that have at least one logged
+
+        run under their (org_id, project_id). Static keys see everything
+
+        when no scope is supplied; otherwise the same scope filter applies.'
+      operationId: list_codebases_v1_findings_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodebaseListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FindingListResponse:
+      properties:
+        findings:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Findings
+        count:
+          type: integer
+          title: Count
+          default: 0
+      type: object
+      title: FindingListResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    FindingSearchResponse:
+      properties:
+        results:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Results
+      type: object
+      title: FindingSearchResponse
+    FindingSearchRequest:
+      properties:
+        query:
+          type: string
+          maxLength: 2000
+          minLength: 1
+          title: Query
+        top_k:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Top K
+          default: 5
+        score_threshold:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Score Threshold
+          default: 0.5
+      type: object
+      required:
+      - query
+      title: FindingSearchRequest
+      description: Body for POST /findings/{codebase_id}/search -- semantic recall query.
+    FindingInvalidateResponse:
+      properties:
+        invalidated:
+          type: integer
+          title: Invalidated
+          default: 0
+      type: object
+      title: FindingInvalidateResponse
+    FindingStoreResponse:
+      properties:
+        finding_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finding Id
+        stored:
+          type: boolean
+          title: Stored
+          default: true
+      type: object
+      title: FindingStoreResponse
+    FindingPatch:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        file_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Path
+        finding_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finding Type
+      type: object
+      title: FindingPatch
+    FindingStoreRequest:
+      properties:
+        content:
+          type: string
+          maxLength: 8000
+          minLength: 1
+          title: Content
+        file_path:
+          type: string
+          maxLength: 512
+          title: File Path
+          default: ''
+        finding_type:
+          type: string
+          maxLength: 64
+          title: Finding Type
+          default: note
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+      type: object
+      required:
+      - content
+      title: FindingStoreRequest
+      description: Body for POST /findings/{codebase_id} -- one finding to persist.
+    FindingInvalidateRequest:
+      properties:
+        file_paths:
+          items:
+            type: string
+          type: array
+          maxItems: 1024
+          title: File Paths
+      type: object
+      title: FindingInvalidateRequest
+      description: Invalidate cached findings whose file_path matches one of the listed paths.
+    CodebaseListResponse:
+      properties:
+        codebases:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Codebases
+      type: object
+      title: CodebaseListResponse
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

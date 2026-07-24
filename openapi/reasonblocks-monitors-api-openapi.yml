@@ -1,0 +1,222 @@
+openapi: 3.1.0
+info:
+  title: ReasonBlocks Billing Monitors API
+  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
+
+
+    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
+
+
+    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  version: 0.1.0
+tags:
+- name: Monitors
+paths:
+  /v1/monitors/evaluate:
+    post:
+      tags:
+      - Monitors
+      summary: Evaluate Monitors
+      operationId: evaluate_monitors_v1_monitors_evaluate_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorEvaluateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorEvaluateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    MonitorEvaluateResponse:
+      properties:
+        inject:
+          type: boolean
+          title: Inject
+        intervention_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Intervention Text
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+        injection_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Injection Path
+        intervention_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Intervention Source
+        fired:
+          items:
+            type: string
+          type: array
+          title: Fired
+        pattern_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pattern Id
+        scores:
+          additionalProperties:
+            type: number
+          type: object
+          title: Scores
+        composite:
+          type: number
+          title: Composite
+          default: 0.0
+      type: object
+      required:
+      - inject
+      title: MonitorEvaluateResponse
+      description: 'Response body. ``intervention_text`` is the only field that drives
+
+        user-visible behaviour; everything else is audit metadata for the
+
+        SDK''s per-call records.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MonitorEvaluateRequest:
+      properties:
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        steps:
+          items:
+            $ref: '#/components/schemas/MonitorStep'
+          type: array
+          maxItems: 2000
+          title: Steps
+        task_profile:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Task Profile
+        weights:
+          anyOf:
+          - additionalProperties:
+              type: number
+            type: object
+          - type: 'null'
+          title: Weights
+        org_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Org Id
+        project_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Project Id
+      type: object
+      title: MonitorEvaluateRequest
+      description: "Request body for /monitors/evaluate.\n\nWeight resolution order (lowest precedence to highest):\n\n1. Server defaults (``MONITOR_WEIGHTS`` in scoring/monitors.py).\n2. Profile preset selected by ``task_profile`` (built-in: ``coding``,\n   ``pr_review``; customer-defined profiles are hydrated into the\n   same registry from the ``monitor_profiles`` table at startup).\n3. Explicit ``weights`` dict on this request — partial overrides are\n   fine; unspecified monitor names fall through to the profile/default."
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MonitorStep:
+      properties:
+        thought:
+          type: string
+          maxLength: 64000
+          title: Thought
+          default: ''
+        action:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Action
+        action_input:
+          title: Action Input
+        observation:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Observation
+        observation_is_error:
+          type: boolean
+          title: Observation Is Error
+          default: false
+      type: object
+      title: MonitorStep
+      description: 'One step in the SDK-side trace, flattened for over-the-wire transit.
+
+
+        Strict shape: untrusted clients can''t inject arbitrary keys. If a new
+
+        field is needed, add it to this model rather than relying on
+
+        ``extra="allow"``.'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

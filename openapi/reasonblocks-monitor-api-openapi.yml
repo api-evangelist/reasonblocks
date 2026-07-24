@@ -1,0 +1,1031 @@
+openapi: 3.1.0
+info:
+  title: ReasonBlocks Billing monitor API
+  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
+
+
+    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
+
+
+    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  version: 0.1.0
+tags:
+- name: monitor
+paths:
+  /v1/monitor/me:
+    get:
+      tags:
+      - monitor
+      summary: Me
+      description: 'Return the caller''s identity + superuser flag. The website''s
+
+        runs page hides the cross-org filter UI from non-superusers based
+
+        on this response.'
+      operationId: me_v1_monitor_me_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Me V1 Monitor Me Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/runs:
+    post:
+      tags:
+      - monitor
+      summary: Start Run
+      operationId: start_run_v1_monitor_runs_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorRunStart'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Start Run V1 Monitor Runs Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - monitor
+      summary: List Runs
+      operationId: list_runs_v1_monitor_runs_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 10000
+          minimum: 1
+          default: 200
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+      - name: api_key_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Api Key Name
+      - name: org_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Org Name
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response List Runs V1 Monitor Runs Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/runs/{run_id}/finish:
+    post:
+      tags:
+      - monitor
+      summary: Finish Run
+      operationId: finish_run_v1_monitor_runs__run_id__finish_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorRunFinish'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Finish Run V1 Monitor Runs  Run Id  Finish Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/runs/{run_id}/steps:
+    post:
+      tags:
+      - monitor
+      summary: Log Step
+      operationId: log_step_v1_monitor_runs__run_id__steps_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorStepLog'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorStepLogResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/runs/{run_id}:
+    get:
+      tags:
+      - monitor
+      summary: Run Detail
+      operationId: run_detail_v1_monitor_runs__run_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Run Detail V1 Monitor Runs  Run Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/health-summary:
+    get:
+      tags:
+      - monitor
+      summary: Monitor Health Summary
+      operationId: monitor_health_summary_v1_monitor_health_summary_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Monitor Health Summary V1 Monitor Health Summary Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/experiments/{experiment_id}/report:
+    get:
+      tags:
+      - monitor
+      summary: Experiment Report
+      description: 'Per-arm A/B report for one experiment: cost/token deltas (primary),
+
+        accuracy non-inferiority with CI (guardrail), reasoning health
+
+        (secondary), SRM, and a per-day learning curve. ``on_fraction`` is the
+
+        coin''s configured ON probability, used only for the SRM check.
+
+
+        Scope rules match the rest of the dashboard: JWT (dashboard) callers
+
+        must name an org; per-customer keys are pinned to their own org.'
+      operationId: experiment_report_v1_monitor_experiments__experiment_id__report_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+      - name: on_fraction
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          default: 0.5
+          title: On Fraction
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Experiment Report V1 Monitor Experiments  Experiment Id  Report Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/profiles:
+    get:
+      tags:
+      - monitor
+      summary: List Profiles
+      description: 'Every monitor profile visible at this scope. Built-ins always
+
+        appear; customs are merged in from Postgres for the org (and the
+
+        project-scoped subset, when ``project_id`` is supplied). Per-customer
+
+        keys see only their own org''s customs regardless of query.'
+      operationId: list_profiles_v1_monitor_profiles_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response List Profiles V1 Monitor Profiles Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - monitor
+      summary: Create Profile
+      description: 'Create a custom profile. Profile IDs that collide with a built-in
+
+        are rejected. The same profile_id can exist once org-wide AND once
+
+        per project; the resolver prefers project-scoped. The org_id /
+
+        project_id authority comes from the API key when it''s per-customer
+
+        -- the body''s values are ignored to prevent cross-tenant writes.'
+      operationId: create_profile_v1_monitor_profiles_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              title: Body
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Create Profile V1 Monitor Profiles Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/profiles/{profile_id}:
+    get:
+      tags:
+      - monitor
+      summary: Get Profile
+      operationId: get_profile_v1_monitor_profiles__profile_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: profile_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Profile Id
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Profile V1 Monitor Profiles  Profile Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - monitor
+      summary: Update Profile
+      description: 'Update an existing custom profile. Built-ins cannot be patched.
+
+        Per-customer keys can only patch profiles in their own org.'
+      operationId: update_profile_v1_monitor_profiles__profile_id__patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: profile_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Profile Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Update Profile V1 Monitor Profiles  Profile Id  Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - monitor
+      summary: Remove Profile
+      description: 'Delete a custom profile. Built-ins cannot be deleted. project_id
+
+        selects between the org-wide ('''') and project-scoped row.
+
+
+        Per-customer keys can only delete profiles in their own org.
+
+        Static principals MUST pass an explicit ``org_id`` -- otherwise we
+
+        refuse rather than fall through to "default", which historically
+
+        let admin keys destroy any tenant''s profile by URL hacking.
+
+        JWT principals must have ``org_id`` in their allowed_orgs.'
+      operationId: remove_profile_v1_monitor_profiles__profile_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: profile_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Profile Id
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          type: string
+          default: default
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Project Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Remove Profile V1 Monitor Profiles  Profile Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/scorers:
+    get:
+      tags:
+      - monitor
+      summary: List Scorers
+      description: 'The closed scorer registry the upstream pipeline understands.
+
+        Custom profiles can only reference these names. Each entry carries
+
+        the default weight under the ``coding`` profile so the editor can
+
+        pre-fill sensible numbers when a customer first picks the scorer.'
+      operationId: list_scorers_v1_monitor_scorers_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response List Scorers V1 Monitor Scorers Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/monitor/stream:
+    get:
+      tags:
+      - monitor
+      summary: Monitor Stream
+      description: "SSE stream of ``monitor_steps`` writes. Filter via ``org_id`` /\n``project_id`` to match the dashboard's current scope.\n\nEvent types:\n  * ``ready`` -- empty payload, sent on connect\n  * ``step``  -- ``{run_id, step_index, org_id, project_id, total_score, fired}``\n                 payload (matches the NOTIFY trigger envelope)."
+      operationId: monitor_stream_v1_monitor_stream_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Org Id
+      - name: project_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    MonitorStepLogResponse:
+      properties:
+        scores:
+          additionalProperties:
+            type: number
+          type: object
+          title: Scores
+        total_score:
+          type: number
+          title: Total Score
+          default: 0.0
+        fired:
+          items:
+            type: string
+          type: array
+          title: Fired
+      type: object
+      title: MonitorStepLogResponse
+      description: The score bundle computed + persisted for the step just logged.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MonitorRunFinish:
+      properties:
+        outcome:
+          type: string
+          maxLength: 64
+          title: Outcome
+          default: ''
+      type: object
+      title: MonitorRunFinish
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MonitorRunStart:
+      properties:
+        run_id:
+          type: string
+          maxLength: 256
+          pattern: ^[A-Za-z0-9_\-./:@]+$
+          title: Run Id
+        agent_name:
+          type: string
+          maxLength: 256
+          title: Agent Name
+          default: ''
+        task:
+          type: string
+          maxLength: 4000
+          title: Task
+          default: ''
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        framework:
+          type: string
+          maxLength: 64
+          title: Framework
+          default: ''
+        codebase_id:
+          type: string
+          maxLength: 256
+          title: Codebase Id
+          default: ''
+        org_id:
+          type: string
+          maxLength: 256
+          title: Org Id
+          default: default
+        project_id:
+          type: string
+          maxLength: 256
+          title: Project Id
+          default: default
+        task_profile:
+          type: string
+          maxLength: 64
+          title: Task Profile
+          default: coding
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+      type: object
+      required:
+      - run_id
+      title: MonitorRunStart
+    MonitorStepLog:
+      properties:
+        step_index:
+          type: integer
+          maximum: 10000.0
+          minimum: 0.0
+          title: Step Index
+        action:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Action
+        action_input:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Action Input
+        thought:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Thought
+        observation:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Observation
+        is_error:
+          type: boolean
+          title: Is Error
+          default: false
+        tokens:
+          type: integer
+          minimum: 0.0
+          title: Tokens
+          default: 0
+        input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Input Tokens
+          default: 0
+        output_tokens:
+          type: integer
+          minimum: 0.0
+          title: Output Tokens
+          default: 0
+        cache_read_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Read Tokens
+          default: 0
+        step_model:
+          type: string
+          maxLength: 128
+          title: Step Model
+          default: ''
+        injections:
+          items:
+            type: string
+          type: array
+          maxItems: 64
+          title: Injections
+        injection_sources:
+          items:
+            type: string
+          type: array
+          maxItems: 64
+          title: Injection Sources
+        intervention_texts:
+          items:
+            type: string
+          type: array
+          maxItems: 64
+          title: Intervention Texts
+        monitors_fired:
+          items:
+            type: string
+          type: array
+          maxItems: 64
+          title: Monitors Fired
+        failure_type:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Failure Type
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+      type: object
+      required:
+      - step_index
+      title: MonitorStepLog
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

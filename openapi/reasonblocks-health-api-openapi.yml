@@ -1,0 +1,31 @@
+openapi: 3.1.0
+info:
+  title: ReasonBlocks Billing Health API
+  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
+
+
+    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
+
+
+    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  version: 0.1.0
+tags:
+- name: Health
+paths:
+  /health:
+    get:
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Health
+components:
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

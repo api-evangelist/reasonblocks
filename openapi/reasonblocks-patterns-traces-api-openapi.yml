@@ -1,0 +1,498 @@
+openapi: 3.1.0
+info:
+  title: ReasonBlocks Billing Patterns & Traces API
+  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
+
+
+    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
+
+
+    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  version: 0.1.0
+tags:
+- name: Patterns & Traces
+paths:
+  /v1/traces/retrieve:
+    post:
+      tags:
+      - Patterns & Traces
+      summary: Retrieve Traces
+      description: Retrieve raw pattern payloads for a tier, optionally filtered.
+      operationId: retrieve_traces_v1_traces_retrieve_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraceRetrieveRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TraceRetrieveResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/traces:
+    post:
+      tags:
+      - Patterns & Traces
+      summary: Store Trace
+      description: Store a completed trace for future distillation.
+      operationId: store_trace_v1_traces_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraceStoreRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    InjectedPattern:
+      properties:
+        pattern_id:
+          type: string
+          maxLength: 256
+          title: Pattern Id
+        tier:
+          type: string
+          maxLength: 32
+          title: Tier
+        similarity:
+          type: number
+          title: Similarity
+          default: 0.0
+      type: object
+      required:
+      - pattern_id
+      - tier
+      title: InjectedPattern
+      description: One pattern the SDK injected during a call.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TraceCallRecord:
+      properties:
+        call_index:
+          type: integer
+          maximum: 10000.0
+          minimum: 0.0
+          title: Call Index
+        messages:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          maxItems: 512
+          title: Messages
+        response:
+          additionalProperties: true
+          type: object
+          title: Response
+        tool_calls:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          maxItems: 128
+          title: Tool Calls
+        monitor_scores:
+          additionalProperties:
+            type: number
+          type: object
+          title: Monitor Scores
+        composite_score:
+          type: number
+          title: Composite Score
+          default: 0.0
+        monitors_fired:
+          items:
+            type: string
+          type: array
+          maxItems: 64
+          title: Monitors Fired
+        injection_fired:
+          type: boolean
+          title: Injection Fired
+          default: false
+        injection_path:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Injection Path
+        injected_patterns:
+          items:
+            $ref: '#/components/schemas/InjectedPattern'
+          type: array
+          maxItems: 32
+          title: Injected Patterns
+        fallback_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Fallback Id
+        primary_failure_type:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Primary Failure Type
+        tokens:
+          type: integer
+          minimum: 0.0
+          title: Tokens
+          default: 0
+      type: object
+      required:
+      - call_index
+      title: TraceCallRecord
+      description: 'One LLM call inside a session, as captured by the SDK middleware.
+
+
+        ``messages`` is a small JSON-friendly projection of the LangChain
+
+        messages sent to the model, not the full wire shape. ``tool_calls``
+
+        captures the tool-call/tool-result pairs for this call pulled from
+
+        LangChain intermediate_steps.'
+    TraceRetrieveRequest:
+      properties:
+        context:
+          type: string
+          maxLength: 64000
+          minLength: 0
+          title: Context
+        level:
+          type: string
+          pattern: ^(e[123])?$
+          title: Level
+          default: ''
+        tier:
+          type: string
+          pattern: ^(e[123])?$
+          title: Tier
+          default: ''
+        top_k:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Top K
+          default: 5
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        customer_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Customer Id
+        failure_type:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Failure Type
+      type: object
+      required:
+      - context
+      title: TraceRetrieveRequest
+      description: 'Retrieval query.
+
+
+        ``level`` (legacy) and ``tier`` are accepted interchangeably — the SDK
+
+        and the server both normalize to lowercase ``e1``/``e2``/``e3``. ``tier``
+
+        is the preferred field for new callers.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TraceStoreRequest:
+      properties:
+        trace_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Trace Id
+        steps:
+          items:
+            $ref: '#/components/schemas/StepPayload'
+          type: array
+          maxItems: 2000
+          title: Steps
+        outcome:
+          type: string
+          maxLength: 64
+          title: Outcome
+          default: ''
+        manifest:
+          anyOf:
+          - $ref: '#/components/schemas/TraceManifest'
+          - type: 'null'
+        calls:
+          items:
+            $ref: '#/components/schemas/TraceCallRecord'
+          type: array
+          maxItems: 2000
+          title: Calls
+      type: object
+      title: TraceStoreRequest
+      description: "POST /traces body.\n\nTwo supported shapes:\n\n* Legacy: ``trace_id`` + ``steps`` + ``outcome``. Returns 200.\n* v2 (trace collection): ``manifest`` + ``calls``. Returns 202;\n  storage + distillation + contrastive extraction run in a background\n  task so the SDK POST is near-instant."
+    StepPayload:
+      properties:
+        step_index:
+          type: integer
+          maximum: 10000.0
+          minimum: 0.0
+          title: Step Index
+        thought:
+          type: string
+          maxLength: 64000
+          title: Thought
+          default: ''
+        action:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Action
+        action_input:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Action Input
+        observation:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Observation
+        difficulty:
+          type: number
+          title: Difficulty
+          default: 0.0
+        state:
+          type: string
+          maxLength: 32
+          title: State
+          default: INIT
+        tokens_used:
+          type: integer
+          minimum: 0.0
+          title: Tokens Used
+          default: 0
+      type: object
+      required:
+      - step_index
+      title: StepPayload
+      description: Legacy per-step shape posted by ``store_trace`` (pre-v2).
+    ETraceItem:
+      properties:
+        tier:
+          type: string
+          title: Tier
+        level:
+          type: string
+          title: Level
+          default: ''
+        pattern_id:
+          type: string
+          maxLength: 256
+          title: Pattern Id
+          default: ''
+        similarity:
+          type: number
+          title: Similarity
+          default: 0.0
+        failure_type:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Failure Type
+        fields:
+          additionalProperties: true
+          type: object
+          title: Fields
+        model_family:
+          type: string
+          maxLength: 128
+          title: Model Family
+          default: ''
+        insight:
+          type: string
+          maxLength: 64000
+          title: Insight
+          default: ''
+        source_trace_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Source Trace Id
+      type: object
+      required:
+      - tier
+      title: ETraceItem
+      description: 'One retrieved pattern.
+
+
+        The SDK treats ``fields`` as the source of truth and feeds it to
+
+        ``reasonblocks.format_routing.render_pattern(tier, model, fields)``.
+
+        The legacy ``insight`` string is preserved only when a caller sends one
+
+        in from somewhere else — this server never populates it.'
+    TraceManifest:
+      properties:
+        trace_id:
+          type: string
+          maxLength: 256
+          title: Trace Id
+        customer_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Customer Id
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        total_calls:
+          type: integer
+          maximum: 10000.0
+          minimum: 0.0
+          title: Total Calls
+          default: 0
+        outcome_status:
+          type: string
+          maxLength: 64
+          title: Outcome Status
+          default: success
+        total_tokens:
+          type: integer
+          minimum: 0.0
+          title: Total Tokens
+          default: 0
+        monitors_fired_summary:
+          items:
+            type: string
+          type: array
+          maxItems: 128
+          title: Monitors Fired Summary
+        task_context:
+          type: string
+          maxLength: 64000
+          title: Task Context
+          default: ''
+        started_at:
+          type: number
+          title: Started At
+          default: 0.0
+        ended_at:
+          type: number
+          title: Ended At
+          default: 0.0
+      type: object
+      required:
+      - trace_id
+      title: TraceManifest
+      description: Session-level manifest the SDK sends with the per-call records.
+    TraceRetrieveResponse:
+      properties:
+        traces:
+          items:
+            $ref: '#/components/schemas/ETraceItem'
+          type: array
+          title: Traces
+      type: object
+      required:
+      - traces
+      title: TraceRetrieveResponse
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

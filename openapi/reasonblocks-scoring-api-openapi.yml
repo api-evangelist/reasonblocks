@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: ReasonBlocks Billing Scoring API
+  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
+
+
+    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
+
+
+    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  version: 0.1.0
+tags:
+- name: Scoring
+paths:
+  /v1/score:
+    post:
+      tags:
+      - Scoring
+      summary: Score Step
+      description: Server-side difficulty scoring.
+      operationId: score_step_v1_score_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ScoreResponse:
+      properties:
+        difficulty:
+          type: number
+          title: Difficulty
+      type: object
+      required:
+      - difficulty
+      title: ScoreResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ScoreRequest:
+      properties:
+        text:
+          type: string
+          maxLength: 64000
+          title: Text
+          default: ''
+        context:
+          type: string
+          maxLength: 64000
+          title: Context
+          default: ''
+      type: object
+      title: ScoreRequest
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

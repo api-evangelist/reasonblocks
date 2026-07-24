@@ -1,0 +1,255 @@
+openapi: 3.1.0
+info:
+  title: ReasonBlocks Billing Pattern Library API
+  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
+
+
+    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
+
+
+    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  version: 0.1.0
+tags:
+- name: Pattern Library
+paths:
+  /v1/library/patterns:
+    get:
+      tags:
+      - Pattern Library
+      summary: List Patterns
+      description: 'List patterns scoped to the caller''s tenant.
+
+
+        Per-customer keys: only their own E1 patterns. E2/E3 are commons /
+
+        universal so they''re returned to anyone (no per-tenant data).
+
+        Static keys: optional ``?org_id=`` filter; otherwise all patterns.
+
+        JWT (dashboard): must pass ``?org_id=`` and the org must be in
+
+        ``allowed_orgs``.'
+      operationId: list_patterns_v1_library_patterns_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: tier
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tier
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          default: 200
+          title: Limit
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Org Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response List Patterns V1 Library Patterns Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/library/patterns/{tier}/{pattern_id}:
+    delete:
+      tags:
+      - Pattern Library
+      summary: Delete Pattern
+      operationId: delete_pattern_v1_library_patterns__tier___pattern_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: tier
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Tier
+      - name: pattern_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Pattern Id
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Org Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Delete Pattern V1 Library Patterns  Tier   Pattern Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Pattern Library
+      summary: Patch Pattern
+      operationId: patch_pattern_v1_library_patterns__tier___pattern_id__patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: tier
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Tier
+      - name: pattern_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Pattern Id
+      - name: org_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Org Id
+      - name: token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key (EventSource fallback)
+          title: Token
+        description: API key (EventSource fallback)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatternPatch'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Patch Pattern V1 Library Patterns  Tier   Pattern Id  Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PatternPatch:
+      properties:
+        fields:
+          additionalProperties: true
+          type: object
+          title: Fields
+      type: object
+      title: PatternPatch
+      description: 'Free-form payload patch. Whitelisted in the service to prevent
+
+        overwriting structural keys (``pattern_id``, ``tier``, ``customer_id``).'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
