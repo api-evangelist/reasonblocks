@@ -1,22 +1,247 @@
 aid: reasonblocks
-name: Reasonblocks
-description: Reasonblocks is a company surfaced as a portfolio company of y-combinator and added to the
-  API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+name: ReasonBlocks
+description: >-
+  ReasonBlocks is a Y Combinator (Spring 2026) startup building a drop-in runtime
+  layer that makes production AI agents observable, self-correcting, and cheaper to
+  run. The platform detects failing agent trajectories (loops and redundant work),
+  compresses stale tool outputs and message histories to cut token spend, and builds
+  a private learning library of reasoning patterns (E-traces) that steer future runs.
+  It ships as a Python SDK with first-party integrations for LangChain, LangGraph,
+  the OpenAI Agents SDK, and the Anthropic Claude / Claude Agent SDK, plus a
+  language-agnostic REST API (rb-api) so any custom agent harness can wire in over
+  three HTTP calls. Reported results include a 42% accuracy gain and ~52% token
+  reduction on SWE-bench Pro.
 url: https://raw.githubusercontent.com/api-evangelist/reasonblocks/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - y-combinator
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: portfolio-lead-enriched
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://reasonblocks.com/rb.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- AI Agents
+- Agent Observability
+- LLM
+- Developer Tools
+- Token Optimization
+- Agent Steering
+- Machine Learning
+- Artificial Intelligence
+- SDK
+apis:
+- aid: reasonblocks:reasonblocks-billing-api
+  name: ReasonBlocks Billing API
+  description: The Billing API from ReasonBlocks — 1 operation(s) for billing.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-billing-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-codebase-findings-api
+  name: ReasonBlocks Codebase Findings API
+  description: The Codebase Findings API from ReasonBlocks — 5 operation(s) for codebase findings.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Codebase Findings
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-codebase-findings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-health-api
+  name: ReasonBlocks Health API
+  description: The Health API from ReasonBlocks — 1 operation(s) for health.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-health-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-monitor-api
+  name: ReasonBlocks monitor API
+  description: The monitor API from ReasonBlocks — 11 operation(s) for monitor.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - monitor
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-monitor-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-monitor-telemetry-api
+  name: ReasonBlocks Monitor Telemetry API
+  description: The Monitor Telemetry API from ReasonBlocks — 11 operation(s) for monitor telemetry.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Monitor Telemetry
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-monitor-telemetry-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-monitors-api
+  name: ReasonBlocks Monitors API
+  description: The Monitors API from ReasonBlocks — 1 operation(s) for monitors.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Monitors
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-monitors-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-pattern-library-api
+  name: ReasonBlocks Pattern Library API
+  description: The Pattern Library API from ReasonBlocks — 2 operation(s) for pattern library.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Pattern Library
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-pattern-library-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-patterns-traces-api
+  name: ReasonBlocks Patterns & Traces API
+  description: The Patterns & Traces API from ReasonBlocks — 2 operation(s) for patterns & traces.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Patterns & Traces
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-patterns-traces-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
+- aid: reasonblocks:reasonblocks-scoring-api
+  name: ReasonBlocks Scoring API
+  description: The Scoring API from ReasonBlocks — 1 operation(s) for scoring.
+  humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
+  baseURL: https://rb-api.reasonblocks.com
+  tags:
+  - Scoring
+  properties:
+  - type: OpenAPI
+    url: openapi/reasonblocks-scoring-api-openapi.yml
+  - type: Documentation
+    url: https://docs.reasonblocks.com/introduction
+  - type: APIReference
+    url: https://rb-api.reasonblocks.com/docs
+  - type: GettingStarted
+    url: https://docs.reasonblocks.com/quickstart
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: DeveloperPortal
+  url: https://docs.reasonblocks.com/
+- type: Documentation
+  url: https://docs.reasonblocks.com/introduction
+- type: APIReference
+  url: https://rb-api.reasonblocks.com/docs
+- type: GettingStarted
+  url: https://docs.reasonblocks.com/quickstart
+- type: GitHubOrganization
+  url: https://github.com/ReasonBlocks
+- type: Website
+  url: https://reasonblocks.com
+- type: Authentication
+  url: authentication/reasonblocks-authentication.yml
+- type: Packages
+  url: packages/reasonblocks-packages.yml
+- type: SDKs
+  url: packages/reasonblocks-packages.yml
+- type: LLMsTxt
+  url: llms/reasonblocks-llms.txt
+- type: MCPServer
+  url: mcp/reasonblocks-mcp.yml
+- type: Overlay
+  url: overlays/reasonblocks-openapi-overlay.yaml
+- type: Conformance
+  url: conformance/reasonblocks-conformance.yml
+- type: ErrorCatalog
+  url: errors/reasonblocks-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/reasonblocks-lifecycle.yml
+- type: Deprecation
+  url: https://docs.reasonblocks.com/api-reference/rest-api/versioning
+- type: Conventions
+  url: conventions/reasonblocks-conventions.yml
+- type: DataModel
+  url: data-model/reasonblocks-data-model.yml
+- type: Sandbox
+  url: sandbox/reasonblocks-sandbox.yml
+- type: DomainSecurity
+  url: security/reasonblocks-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/reasonblocks-agentic-access.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1

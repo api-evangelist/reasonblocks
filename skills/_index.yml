@@ -1,0 +1,26 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/reasonblocks-openapi-original.json
+skills:
+- file: reasonblocks-retrieve-and-steer.md
+  name: Retrieve steering patterns and submit a trace
+  api: openapi/reasonblocks-openapi-original.json
+  operations:
+  - retrieve_traces_v1_traces_retrieve_post
+  - score_step_v1_score_post
+  - store_trace_v1_traces_post
+- file: reasonblocks-monitor-run-telemetry.md
+  name: Track a monitored agent run with telemetry
+  api: openapi/reasonblocks-openapi-original.json
+  operations:
+  - start_run_v1_monitor_runs_post
+  - log_step_v1_monitor_runs__run_id__steps_post
+  - evaluate_monitors_v1_monitors_evaluate_post
+  - finish_run_v1_monitor_runs__run_id__finish_post
+- file: reasonblocks-codebase-memory.md
+  name: Persist and recall codebase findings
+  api: openapi/reasonblocks-openapi-original.json
+  operations:
+  - store_finding_v1_findings__codebase_id__post
+  - search_findings_v1_findings__codebase_id__search_post
+  - invalidate_findings_v1_findings__codebase_id__invalidate_post

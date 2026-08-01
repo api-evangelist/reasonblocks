@@ -1,0 +1,30 @@
+{
+  "provider": "reasonblocks",
+  "sources": [
+    "reasonblocks-billing-api-openapi.yml",
+    "reasonblocks-codebase-findings-api-openapi.yml",
+    "reasonblocks-health-api-openapi.yml",
+    "reasonblocks-monitor-api-openapi.yml",
+    "reasonblocks-monitor-telemetry-api-openapi.yml",
+    "reasonblocks-monitors-api-openapi.yml",
+    "reasonblocks-pattern-library-api-openapi.yml",
+    "reasonblocks-patterns-traces-api-openapi.yml",
+    "reasonblocks-scoring-api-openapi.yml"
+  ],
+  "outputs": [
+    "reasonblocks-billing-api-openapi.yml",
+    "reasonblocks-codebase-findings-api-openapi.yml",
+    "reasonblocks-health-api-openapi.yml",
+    "reasonblocks-monitor-api-openapi.yml",
+    "reasonblocks-monitor-telemetry-api-openapi.yml",
+    "reasonblocks-monitors-api-openapi.yml",
+    "reasonblocks-pattern-library-api-openapi.yml",
+    "reasonblocks-patterns-traces-api-openapi.yml",
+    "reasonblocks-scoring-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

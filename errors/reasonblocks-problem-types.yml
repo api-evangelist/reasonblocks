@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/reasonblocks-openapi-original.json
+docs: https://docs.reasonblocks.com/api-reference/rest-api/setup
+format: json-detail
+envelope: '{"detail": "<reason>"}'
+notes: >-
+  ReasonBlocks does NOT use RFC 9457 problem+json. On 4xx/5xx the body is a plain
+  JSON object of shape {"detail": "<reason>"}. Status semantics below are harvested
+  from the REST API setup "Error codes" table; 422 is the FastAPI/Pydantic
+  HTTPValidationError shape defined in the OpenAPI components.
+problems:
+- status: 400
+  title: Validation failure or malformed request
+- status: 401
+  title: Missing or invalid Authorization bearer
+  remediation: >-
+    Send Authorization: Bearer <api_key>. Revoked keys start returning 401 within
+    ~60s (server-side auth cache TTL).
+- status: 403
+  title: Authenticated, but lacking access to the requested org or resource
+- status: 404
+  title: Resource not found
+  remediation: >-
+    A cross-tenant access attempt is deliberately masked as 404 so resource IDs
+    cannot be enumerated.
+- status: 413
+  title: Request body exceeded MAX_BODY_BYTES (default 5 MB)
+- status: 422
+  title: Pydantic schema violation (field-level)
+  schema: HTTPValidationError
+  source_operation: openapi/reasonblocks-openapi-original.json#retrieve_traces_v1_traces_retrieve_post
+- status: 429
+  title: Rate limited
+  remediation: Per-key sliding-window limit exceeded; honor the Retry-After header (1s).
+- status: 500
+  title: Server-side error
+  remediation: Safe to retry with exponential backoff.

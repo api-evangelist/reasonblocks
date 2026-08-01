@@ -1,0 +1,22 @@
+generated: '2026-07-21'
+method: searched
+source: https://pypi.org/pypi/reasonblocks/json
+packages:
+- language: python
+  registry: pypi
+  name: reasonblocks
+  version: 0.2.5
+  url: https://pypi.org/project/reasonblocks/
+  install: pip install reasonblocks
+  official: true
+  license: MIT
+  requires_python: '>=3.10'
+  repository: https://github.com/ReasonBlocks/sdk
+  description: >-
+    Drop-in agent observability + steering for LangChain, LangGraph, the OpenAI
+    Agents SDK, the Claude Agent SDK, and the Anthropic Messages API. Wraps the
+    ReasonBlocks REST API (rb-api) with framework-specific middleware, codebase
+    memory tools, FSM scoring, monitor steering, and E-trace injection.
+  extras:
+  - name: dev
+    install: pip install "reasonblocks[dev]"

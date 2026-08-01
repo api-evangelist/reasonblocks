@@ -1,0 +1,53 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.reasonblocks.com/api-reference/rest-api/setup
+docs:
+- https://docs.reasonblocks.com/api-reference/rest-api/setup
+- https://docs.reasonblocks.com/api-reference/rest-api/overview
+- https://docs.reasonblocks.com/api-reference/rest-api/versioning
+authentication:
+  style: http-bearer
+  header: 'Authorization: Bearer <api_key>'
+  key_prefixes:
+    live: rb_live_
+    test: rb_test_
+  static_keys: REASONBLOCKS_KEYS (comma-separated, self-hosted/CI/dev)
+  tenancy: >-
+    Per-customer keys are scoped to an org_id (optionally project_id); the key scope
+    is the authoritative tenant identity, so body fields like org_id are ignored to
+    prevent cross-tenant writes.
+  see: authentication/reasonblocks-authentication.yml
+idempotency:
+  supported: false
+  notes: No Idempotency-Key header or parameter is documented in the spec or docs.
+pagination:
+  style: token
+  params:
+  - limit
+  - offset
+  - token
+  notes: List endpoints (e.g. /v1/monitor/runs, /v1/library/patterns) accept limit/offset and an opaque token cursor.
+versioning:
+  style: uri-path
+  current: v1
+  see: lifecycle/reasonblocks-lifecycle.yml
+rate_limiting:
+  scheme: per-key sliding-window (1-second token bucket)
+  sustained_per_sec: 200
+  burst: 400
+  env:
+    rate: RATE_LIMIT_PER_SEC
+    burst: RATE_LIMIT_BURST
+  signal: 429 with Retry-After 1
+  body_size_cap_bytes: 5242880
+error_envelope:
+  shape: '{"detail": "<reason>"}'
+  format: json-detail
+  see: errors/reasonblocks-problem-types.yml
+cors:
+  policy: explicit allowlist, no wildcard-with-credentials; CORS_ALLOWED_ORIGINS env
+request_tracing:
+  request_id_header: null
+metadata:
+  supported: true
+  notes: Monitor runs accept run metadata / tags (see advanced configuration docs).

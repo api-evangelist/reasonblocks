@@ -1,0 +1,27 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for ReasonBlocks REST API
+  version: 1.0.0
+extends: openapi/reasonblocks-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-21'
+    x-apievangelist-provider: reasonblocks
+    x-apievangelist-category: agent-observability
+    x-production-base-url: https://rb-api.reasonblocks.com
+- target: $.servers
+  description: The published FastAPI schema omits servers[]; add the production host.
+  update:
+  - url: https://rb-api.reasonblocks.com
+    description: Production (hosted)
+- target: $.info
+  description: Capture cross-cutting conventions harvested from the docs.
+  update:
+    x-conventions:
+      auth: HTTP Bearer (rb_live_ / rb_test_ API keys)
+      versioning: uri-path (/v1/), legacy unversioned aliases hidden from schema
+      pagination: token-based (limit/offset/token query params)
+      idempotency: not-supported
+      rate_limit: 200/sec sustained, 400 burst, 429 + Retry-After
+      error_envelope: '{"detail": "<reason>"}'

@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.reasonblocks.com/api-reference/rest-api/setup
+notes: >-
+  ReasonBlocks is not a payments API, so there are no test cards / bank accounts.
+  Its sandbox surface is a test-vs-live API-key separation plus a fully self-hostable
+  service for isolated testing. Values below are published verbatim in the docs;
+  nothing is invented.
+test_vs_live:
+  live_key_prefix: rb_live_
+  test_key_prefix: rb_test_
+  notes: >-
+    Per-customer keys are issued from the dashboard; production keys start with
+    rb_live_ and test keys with rb_test_. The key's org scope is the authoritative
+    tenant identity.
+static_dev_keys:
+  env: REASONBLOCKS_KEYS
+  notes: Comma-separated static keys for self-hosted, CI, and dev; no org scope.
+self_hosting:
+  runtime: single FastAPI process
+  docker:
+  - docker build -t rb-api .
+  - docker run -p 8000:8000 --env-file .env rb-api
+  base_url: http://<your-host>:8000
+  repo: https://github.com/ReasonBlocks/rb-api
+  required_env:
+  - REASONBLOCKS_KEYS
+  - QDRANT_URL
+  - QDRANT_API_KEY
+  - OPENAI_API_KEY
+  - SUPABASE_URL
+  - SUPABASE_SERVICE_KEY
+  - SUPABASE_JWT_SECRET
+  - SUPABASE_DB_URL
+  - CORS_ALLOWED_ORIGINS
+health_check:
+  url: https://rb-api.reasonblocks.com/health
+  response: '{"status":"ok","version":"0.1.0"}'
+retrieval_tiers:
+  - e1
+  - e2
+  - e3
+ab_testing:
+  docs: https://docs.reasonblocks.com/guides/ab-testing
+  notes: >-
+    Randomly route each run to ReasonBlocks ON (full pipeline) or OFF (vanilla) and
+    pull a per-arm report comparing cost, tokens, and accuracy — built for proving
+    value during an evaluation.

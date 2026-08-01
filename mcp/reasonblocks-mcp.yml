@@ -1,0 +1,50 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/reasonblocks-openapi-original.json
+notes: >-
+  No official hosted/remote ReasonBlocks MCP server was found (no listing in the
+  MCP registry, no @modelcontextprotocol package, no mcp.reasonblocks.com). This is
+  a DERIVED candidate tool list, one tool per REST operationId, so an MCP server
+  could be forged from the published OpenAPI. ReasonBlocks does ship SDK "tool
+  factories" (make_claude_tools / make_langchain_tools / make_openai_tools) that
+  expose CodebaseMemory + ImportGraph as agent-framework tools, but those are
+  in-process framework tools, not an MCP server.
+server:
+  name: reasonblocks
+  transport: http
+  url: null
+tools:
+- name: retrieve_traces
+  description: Retrieve reasoning patterns / E-traces to inject into a system prompt.
+  source_operation: openapi/reasonblocks-openapi-original.json#retrieve_traces_v1_traces_retrieve_post
+- name: store_trace
+  description: Submit a completed agent trace for distillation into patterns.
+  source_operation: openapi/reasonblocks-openapi-original.json#store_trace_v1_traces_post
+- name: list_patterns
+  description: List patterns in the pattern library by tier.
+  source_operation: openapi/reasonblocks-openapi-original.json#list_patterns_v1_library_patterns_get
+- name: score_step
+  description: Heuristically score a single agent step for difficulty (FSM state).
+  source_operation: openapi/reasonblocks-openapi-original.json#score_step_v1_score_post
+- name: evaluate_monitors
+  description: Run the server-side trajectory monitors against a run and get steering text.
+  source_operation: openapi/reasonblocks-openapi-original.json#evaluate_monitors_v1_monitors_evaluate_post
+- name: store_finding
+  description: Persist a per-codebase agent finding into codebase memory.
+  source_operation: openapi/reasonblocks-openapi-original.json#store_finding_v1_findings__codebase_id__post
+- name: search_findings
+  description: Semantic search over stored findings for a codebase.
+  source_operation: openapi/reasonblocks-openapi-original.json#search_findings_v1_findings__codebase_id__search_post
+- name: invalidate_findings
+  description: Invalidate findings whose blast radius covers changed files.
+  source_operation: openapi/reasonblocks-openapi-original.json#invalidate_findings_v1_findings__codebase_id__invalidate_post
+- name: start_run
+  description: Start a monitor telemetry run.
+  source_operation: openapi/reasonblocks-openapi-original.json#start_run_v1_monitor_runs_post
+- name: log_step
+  description: Log per-step telemetry to a monitor run and get the scored bundle.
+  source_operation: openapi/reasonblocks-openapi-original.json#log_step_v1_monitor_runs__run_id__steps_post
+- name: finish_run
+  description: Finish a monitor telemetry run.
+  source_operation: openapi/reasonblocks-openapi-original.json#finish_run_v1_monitor_runs__run_id__finish_post

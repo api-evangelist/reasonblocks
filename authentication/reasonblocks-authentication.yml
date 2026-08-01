@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/reasonblocks-openapi-original.json
+docs: https://docs.reasonblocks.com/api-reference/rest-api/setup
+summary:
+  types:
+  - http
+  api_key_in:
+  - header
+notes: >-
+  Every route requires Authorization: Bearer <api_key>. Three credential paths:
+  per-customer keys issued from the dashboard (scoped to org_id / optional project_id;
+  live keys start rb_live_, test keys rb_test_), static keys via the REASONBLOCKS_KEYS
+  env var (self-hosted/CI/dev, no org scope), and a Supabase JWT for the dashboard UI
+  only. The key's scope is the authoritative tenant identity — body org_id fields are
+  ignored. No OAuth2/OIDC surface; no scope model.
+schemes:
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  bearer_prefixes:
+  - rb_live_
+  - rb_test_
+  sources:
+  - openapi/reasonblocks-openapi-original.json

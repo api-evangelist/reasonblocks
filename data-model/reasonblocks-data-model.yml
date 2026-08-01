@@ -1,0 +1,66 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/reasonblocks-openapi-original.json
+notes: >-
+  Entity-relationship graph derived from the OpenAPI component schemas and the path
+  parameters (codebase_id, run_id, tier/pattern_id, experiment_id, profile_id) of the
+  ReasonBlocks REST API. Tiers e1/e2/e3 correspond to the three E-trace steering
+  tiers (instance-level, failure-mode, universal).
+entities:
+- name: Trace
+  schemas: [TraceStoreRequest, TraceRetrieveRequest, TraceManifest, TraceCallRecord]
+  description: A completed agent run submitted for distillation into steering patterns.
+- name: Pattern
+  schemas: [ETraceItem, InjectedPattern, PatternPatch]
+  description: A retrieved E-trace steering pattern, organized by tier (e1/e2/e3).
+- name: Codebase
+  schemas: [CodebaseListResponse]
+  key: codebase_id
+  description: A repository namespace that owns agent findings memory.
+- name: Finding
+  schemas: [FindingStoreRequest, FindingStoreResponse, FindingSearchRequest, FindingSearchResponse, FindingPatch, FindingListResponse, FindingInvalidateRequest]
+  description: A per-codebase agent finding stored, searched, patched, and invalidated in codebase memory.
+- name: MonitorRun
+  schemas: [MonitorRunStart, MonitorRunFinish]
+  key: run_id
+  description: A monitored agent run tracked for telemetry, scoring, and experiments.
+- name: Step
+  schemas: [MonitorStep, MonitorStepLog, MonitorStepLogResponse, StepPayload]
+  description: A single per-step telemetry record logged against a monitor run.
+- name: Score
+  schemas: [ScoreRequest, ScoreResponse]
+  description: The heuristic FSM difficulty score for a step.
+- name: MonitorEvaluation
+  schemas: [MonitorEvaluateRequest, MonitorEvaluateResponse]
+  description: The output of the six server-side trajectory monitors for a run.
+- name: Profile
+  description: A monitor task profile (coding, pr_review, qa) weighting the six monitors.
+relationships:
+- from: Finding
+  to: Codebase
+  type: belongs_to
+  via: codebase_id
+- from: Codebase
+  to: Finding
+  type: has_many
+  via: codebase_id
+- from: MonitorRun
+  to: Step
+  type: has_many
+  via: run_id
+- from: Step
+  to: MonitorRun
+  type: belongs_to
+  via: run_id
+- from: Trace
+  to: Pattern
+  type: has_many
+  via: distillation
+- from: MonitorRun
+  to: MonitorEvaluation
+  type: has_one
+  via: run_id
+- from: Profile
+  to: MonitorEvaluation
+  type: has_many
+  via: profile_weights
