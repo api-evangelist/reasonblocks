@@ -1,0 +1,210 @@
+{
+  "item": [
+    {
+      "id": "65011cb4-f7fa-4d44-8d26-561f07104045",
+      "name": "Monitors",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a62a53df-a1fa-495c-a013-0a0dd2511d66",
+          "name": "Evaluate Monitors",
+          "request": {
+            "name": "Evaluate Monitors",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "monitors",
+                "evaluate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "API key (EventSource fallback)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"\",\n  \"steps\": [\n    {\n      \"thought\": \"\",\n      \"action\": \"<string>\",\n      \"action_input\": {},\n      \"observation\": \"<string>\",\n      \"observation_is_error\": false\n    },\n    {\n      \"thought\": \"\",\n      \"action\": \"<string>\",\n      \"action_input\": {},\n      \"observation\": \"<string>\",\n      \"observation_is_error\": false\n    }\n  ],\n  \"task_profile\": \"<string>\",\n  \"weights\": {\n    \"key_0\": \"<number>\",\n    \"key_1\": \"<number>\"\n  },\n  \"org_id\": \"<string>\",\n  \"project_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cfe3e42e-a458-457a-836f-cac589ebc2d4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "monitors",
+                    "evaluate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"\",\n  \"steps\": [\n    {\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": {},\n      \"observation\": \"string\",\n      \"observation_is_error\": false\n    },\n    {\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": {},\n      \"observation\": \"string\",\n      \"observation_is_error\": false\n    }\n  ],\n  \"task_profile\": \"<string>\",\n  \"weights\": {\n    \"key_0\": \"<number>\",\n    \"key_1\": \"<number>\",\n    \"key_2\": \"<number>\"\n  },\n  \"org_id\": \"<string>\",\n  \"project_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"inject\": false,\n  \"intervention_text\": \"string\",\n  \"failure_type\": \"string\",\n  \"injection_path\": \"string\",\n  \"intervention_source\": \"string\",\n  \"fired\": [\n    \"string\",\n    \"string\"\n  ],\n  \"pattern_id\": \"string\",\n  \"scores\": {\n    \"key_0\": 189.81451769918723,\n    \"key_1\": 3579.072544730546,\n    \"key_2\": 3041.424015930251,\n    \"key_3\": 949.7629002911578\n  },\n  \"composite\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8d22b52-e93d-4a1c-ad79-1a977582139b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "monitors",
+                    "evaluate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"\",\n  \"steps\": [\n    {\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": {},\n      \"observation\": \"string\",\n      \"observation_is_error\": false\n    },\n    {\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": {},\n      \"observation\": \"string\",\n      \"observation_is_error\": false\n    }\n  ],\n  \"task_profile\": \"<string>\",\n  \"weights\": {\n    \"key_0\": \"<number>\",\n    \"key_1\": \"<number>\",\n    \"key_2\": \"<number>\"\n  },\n  \"org_id\": \"<string>\",\n  \"project_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d5f29f84-0049-4d86-b02b-979fa038e408",
+    "name": "ReasonBlocks Billing Monitors API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "ReasonBlocks REST API. Public routes are versioned under `/v1/`.\n\n**Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.\n\n**Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.",
+      "type": "text/plain"
+    }
+  }
+}

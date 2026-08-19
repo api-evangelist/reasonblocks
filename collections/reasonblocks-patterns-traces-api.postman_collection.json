@@ -1,0 +1,391 @@
+{
+  "item": [
+    {
+      "id": "1b5635b8-2d90-4a6e-b2ae-7adf78fedfd0",
+      "name": "Patterns & Traces",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "551125f8-d5a7-4419-943c-02508d8bbe77",
+          "name": "Retrieve Traces",
+          "request": {
+            "name": "Retrieve Traces",
+            "description": {
+              "content": "Retrieve raw pattern payloads for a tier, optionally filtered.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "traces",
+                "retrieve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "API key (EventSource fallback)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"context\": \"<string>\",\n  \"level\": \"\",\n  \"tier\": \"\",\n  \"top_k\": 5,\n  \"model\": \"\",\n  \"customer_id\": \"<string>\",\n  \"failure_type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f78854bb-e23d-4674-9dd7-8ef2a9160e2d",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "traces",
+                    "retrieve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"context\": \"<string>\",\n  \"level\": \"\",\n  \"tier\": \"\",\n  \"top_k\": 5,\n  \"model\": \"\",\n  \"customer_id\": \"<string>\",\n  \"failure_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"traces\": [\n    {\n      \"tier\": \"string\",\n      \"level\": \"\",\n      \"pattern_id\": \"\",\n      \"similarity\": 0,\n      \"failure_type\": \"string\",\n      \"fields\": {\n        \"key_0\": true,\n        \"key_1\": 5411,\n        \"key_2\": false,\n        \"key_3\": 9848,\n        \"key_4\": true\n      },\n      \"model_family\": \"\",\n      \"insight\": \"\",\n      \"source_trace_id\": \"string\"\n    },\n    {\n      \"tier\": \"string\",\n      \"level\": \"\",\n      \"pattern_id\": \"\",\n      \"similarity\": 0,\n      \"failure_type\": \"string\",\n      \"fields\": {\n        \"key_0\": 2385.9771967554366,\n        \"key_1\": 1382,\n        \"key_2\": \"string\"\n      },\n      \"model_family\": \"\",\n      \"insight\": \"\",\n      \"source_trace_id\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab4d7d4f-04c1-4b7a-8dff-8734fe4bbb9c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "traces",
+                    "retrieve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"context\": \"<string>\",\n  \"level\": \"\",\n  \"tier\": \"\",\n  \"top_k\": 5,\n  \"model\": \"\",\n  \"customer_id\": \"<string>\",\n  \"failure_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ffbc5c10-7458-45ee-aca1-f7160ebf82e1",
+          "name": "Store Trace",
+          "request": {
+            "name": "Store Trace",
+            "description": {
+              "content": "Store a completed trace for future distillation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "traces"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "API key (EventSource fallback)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trace_id\": \"<string>\",\n  \"steps\": [\n    {\n      \"step_index\": \"<integer>\",\n      \"thought\": \"\",\n      \"action\": \"<string>\",\n      \"action_input\": \"<string>\",\n      \"observation\": \"<string>\",\n      \"difficulty\": 0,\n      \"state\": \"INIT\",\n      \"tokens_used\": 0\n    },\n    {\n      \"step_index\": \"<integer>\",\n      \"thought\": \"\",\n      \"action\": \"<string>\",\n      \"action_input\": \"<string>\",\n      \"observation\": \"<string>\",\n      \"difficulty\": 0,\n      \"state\": \"INIT\",\n      \"tokens_used\": 0\n    }\n  ],\n  \"outcome\": \"\",\n  \"manifest\": {\n    \"trace_id\": \"<string>\",\n    \"customer_id\": \"<string>\",\n    \"model\": \"\",\n    \"total_calls\": 0,\n    \"outcome_status\": \"success\",\n    \"total_tokens\": 0,\n    \"monitors_fired_summary\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"task_context\": \"\",\n    \"started_at\": 0,\n    \"ended_at\": 0\n  },\n  \"calls\": [\n    {\n      \"call_index\": \"<integer>\",\n      \"messages\": [\n        {\n          \"key_0\": false,\n          \"key_1\": 4665.9576064955645\n        },\n        {\n          \"key_0\": false\n        }\n      ],\n      \"response\": {\n        \"key_0\": 7790,\n        \"key_1\": true,\n        \"key_2\": \"string\",\n        \"key_3\": 3507\n      },\n      \"tool_calls\": [\n        {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        {\n          \"key_0\": 2267.5507486052015,\n          \"key_1\": true\n        }\n      ],\n      \"monitor_scores\": {\n        \"key_0\": \"<number>\",\n        \"key_1\": \"<number>\",\n        \"key_2\": \"<number>\"\n      },\n      \"composite_score\": 0,\n      \"monitors_fired\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"injection_fired\": false,\n      \"injection_path\": \"<string>\",\n      \"injected_patterns\": [\n        {\n          \"pattern_id\": \"<string>\",\n          \"tier\": \"<string>\",\n          \"similarity\": 0\n        },\n        {\n          \"pattern_id\": \"<string>\",\n          \"tier\": \"<string>\",\n          \"similarity\": 0\n        }\n      ],\n      \"fallback_id\": \"<string>\",\n      \"primary_failure_type\": \"<string>\",\n      \"tokens\": 0\n    },\n    {\n      \"call_index\": \"<integer>\",\n      \"messages\": [\n        {\n          \"key_0\": 5926,\n          \"key_1\": true\n        },\n        {\n          \"key_0\": false,\n          \"key_1\": 5020.85656546217,\n          \"key_2\": 8977.837932623901\n        }\n      ],\n      \"response\": {\n        \"key_0\": 7819.277331282972,\n        \"key_1\": \"string\"\n      },\n      \"tool_calls\": [\n        {\n          \"key_0\": 2155\n        },\n        {\n          \"key_0\": 9733.710480089783,\n          \"key_1\": 5472.282422666738,\n          \"key_2\": 2635.4526304101746\n        }\n      ],\n      \"monitor_scores\": {\n        \"key_0\": \"<number>\",\n        \"key_1\": \"<number>\"\n      },\n      \"composite_score\": 0,\n      \"monitors_fired\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"injection_fired\": false,\n      \"injection_path\": \"<string>\",\n      \"injected_patterns\": [\n        {\n          \"pattern_id\": \"<string>\",\n          \"tier\": \"<string>\",\n          \"similarity\": 0\n        },\n        {\n          \"pattern_id\": \"<string>\",\n          \"tier\": \"<string>\",\n          \"similarity\": 0\n        }\n      ],\n      \"fallback_id\": \"<string>\",\n      \"primary_failure_type\": \"<string>\",\n      \"tokens\": 0\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8269679c-4ac9-48b3-bc23-ee216c187207",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "traces"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"trace_id\": \"<string>\",\n  \"steps\": [\n    {\n      \"step_index\": 5673,\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": \"string\",\n      \"observation\": \"string\",\n      \"difficulty\": 0,\n      \"state\": \"INIT\",\n      \"tokens_used\": 0\n    },\n    {\n      \"step_index\": 505,\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": \"string\",\n      \"observation\": \"string\",\n      \"difficulty\": 0,\n      \"state\": \"INIT\",\n      \"tokens_used\": 0\n    }\n  ],\n  \"outcome\": \"\",\n  \"manifest\": {\n    \"trace_id\": \"string\",\n    \"customer_id\": \"string\",\n    \"model\": \"\",\n    \"total_calls\": 0,\n    \"outcome_status\": \"success\",\n    \"total_tokens\": 0,\n    \"monitors_fired_summary\": [\n      \"string\",\n      \"string\"\n    ],\n    \"task_context\": \"\",\n    \"started_at\": 0,\n    \"ended_at\": 0\n  },\n  \"calls\": [\n    {\n      \"call_index\": 6152,\n      \"messages\": [\n        {\n          \"key_0\": 7718.371192476139,\n          \"key_1\": false\n        },\n        {\n          \"key_0\": \"string\"\n        }\n      ],\n      \"response\": {\n        \"key_0\": 818.7708110265546,\n        \"key_1\": \"string\"\n      },\n      \"tool_calls\": [\n        {\n          \"key_0\": true,\n          \"key_1\": 1866,\n          \"key_2\": true,\n          \"key_3\": \"string\"\n        },\n        {\n          \"key_0\": 1817.704935179476\n        }\n      ],\n      \"monitor_scores\": {\n        \"key_0\": 7319.062891262047\n      },\n      \"composite_score\": 0,\n      \"monitors_fired\": [\n        \"string\",\n        \"string\"\n      ],\n      \"injection_fired\": false,\n      \"injection_path\": \"string\",\n      \"injected_patterns\": [\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        },\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        }\n      ],\n      \"fallback_id\": \"string\",\n      \"primary_failure_type\": \"string\",\n      \"tokens\": 0\n    },\n    {\n      \"call_index\": 9236,\n      \"messages\": [\n        {\n          \"key_0\": 6979.172021997147\n        },\n        {\n          \"key_0\": \"string\",\n          \"key_1\": true,\n          \"key_2\": \"string\"\n        }\n      ],\n      \"response\": {\n        \"key_0\": 1600.8191395611505,\n        \"key_1\": 3700.8062846364533\n      },\n      \"tool_calls\": [\n        {\n          \"key_0\": true,\n          \"key_1\": 2472,\n          \"key_2\": false\n        },\n        {\n          \"key_0\": \"string\",\n          \"key_1\": true\n        }\n      ],\n      \"monitor_scores\": {\n        \"key_0\": 8277.363407900535,\n        \"key_1\": 4710.581206249449\n      },\n      \"composite_score\": 0,\n      \"monitors_fired\": [\n        \"string\",\n        \"string\"\n      ],\n      \"injection_fired\": false,\n      \"injection_path\": \"string\",\n      \"injected_patterns\": [\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        },\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        }\n      ],\n      \"fallback_id\": \"string\",\n      \"primary_failure_type\": \"string\",\n      \"tokens\": 0\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0cf58b6b-6d9d-4cd8-84fb-2c75a82021f0",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "traces"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"trace_id\": \"<string>\",\n  \"steps\": [\n    {\n      \"step_index\": 5673,\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": \"string\",\n      \"observation\": \"string\",\n      \"difficulty\": 0,\n      \"state\": \"INIT\",\n      \"tokens_used\": 0\n    },\n    {\n      \"step_index\": 505,\n      \"thought\": \"\",\n      \"action\": \"string\",\n      \"action_input\": \"string\",\n      \"observation\": \"string\",\n      \"difficulty\": 0,\n      \"state\": \"INIT\",\n      \"tokens_used\": 0\n    }\n  ],\n  \"outcome\": \"\",\n  \"manifest\": {\n    \"trace_id\": \"string\",\n    \"customer_id\": \"string\",\n    \"model\": \"\",\n    \"total_calls\": 0,\n    \"outcome_status\": \"success\",\n    \"total_tokens\": 0,\n    \"monitors_fired_summary\": [\n      \"string\",\n      \"string\"\n    ],\n    \"task_context\": \"\",\n    \"started_at\": 0,\n    \"ended_at\": 0\n  },\n  \"calls\": [\n    {\n      \"call_index\": 6152,\n      \"messages\": [\n        {\n          \"key_0\": 7718.371192476139,\n          \"key_1\": false\n        },\n        {\n          \"key_0\": \"string\"\n        }\n      ],\n      \"response\": {\n        \"key_0\": 818.7708110265546,\n        \"key_1\": \"string\"\n      },\n      \"tool_calls\": [\n        {\n          \"key_0\": true,\n          \"key_1\": 1866,\n          \"key_2\": true,\n          \"key_3\": \"string\"\n        },\n        {\n          \"key_0\": 1817.704935179476\n        }\n      ],\n      \"monitor_scores\": {\n        \"key_0\": 7319.062891262047\n      },\n      \"composite_score\": 0,\n      \"monitors_fired\": [\n        \"string\",\n        \"string\"\n      ],\n      \"injection_fired\": false,\n      \"injection_path\": \"string\",\n      \"injected_patterns\": [\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        },\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        }\n      ],\n      \"fallback_id\": \"string\",\n      \"primary_failure_type\": \"string\",\n      \"tokens\": 0\n    },\n    {\n      \"call_index\": 9236,\n      \"messages\": [\n        {\n          \"key_0\": 6979.172021997147\n        },\n        {\n          \"key_0\": \"string\",\n          \"key_1\": true,\n          \"key_2\": \"string\"\n        }\n      ],\n      \"response\": {\n        \"key_0\": 1600.8191395611505,\n        \"key_1\": 3700.8062846364533\n      },\n      \"tool_calls\": [\n        {\n          \"key_0\": true,\n          \"key_1\": 2472,\n          \"key_2\": false\n        },\n        {\n          \"key_0\": \"string\",\n          \"key_1\": true\n        }\n      ],\n      \"monitor_scores\": {\n        \"key_0\": 8277.363407900535,\n        \"key_1\": 4710.581206249449\n      },\n      \"composite_score\": 0,\n      \"monitors_fired\": [\n        \"string\",\n        \"string\"\n      ],\n      \"injection_fired\": false,\n      \"injection_path\": \"string\",\n      \"injected_patterns\": [\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        },\n        {\n          \"pattern_id\": \"string\",\n          \"tier\": \"string\",\n          \"similarity\": 0\n        }\n      ],\n      \"fallback_id\": \"string\",\n      \"primary_failure_type\": \"string\",\n      \"tokens\": 0\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9246e1fc-7233-4a91-a3a3-b7cd96b86d50",
+    "name": "ReasonBlocks Billing Patterns & Traces API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "ReasonBlocks REST API. Public routes are versioned under `/v1/`.\n\n**Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.\n\n**Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.",
+      "type": "text/plain"
+    }
+  }
+}

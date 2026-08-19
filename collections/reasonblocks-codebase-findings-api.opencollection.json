@@ -1,0 +1,273 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ReasonBlocks Billing Codebase Findings API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Codebase Findings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/findings/:codebase_id",
+            "params": [
+              {
+                "name": "codebase_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List Findings"
+        },
+        {
+          "info": {
+            "name": "Store Finding",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/findings/:codebase_id",
+            "params": [
+              {
+                "name": "codebase_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Store Finding"
+        },
+        {
+          "info": {
+            "name": "Clear Findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/findings/:codebase_id",
+            "params": [
+              {
+                "name": "codebase_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Clear Findings"
+        },
+        {
+          "info": {
+            "name": "Search Findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/findings/:codebase_id/search",
+            "params": [
+              {
+                "name": "codebase_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Search Findings"
+        },
+        {
+          "info": {
+            "name": "Patch Finding",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/findings/:codebase_id/:finding_id",
+            "params": [
+              {
+                "name": "codebase_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "finding_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a single finding's content/file_path/finding_type. If content\nchanges, the embedding is recomputed so search stays consistent."
+        },
+        {
+          "info": {
+            "name": "Delete Finding",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/findings/:codebase_id/:finding_id",
+            "params": [
+              {
+                "name": "codebase_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "finding_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a single finding by id."
+        },
+        {
+          "info": {
+            "name": "Invalidate Findings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/findings/:codebase_id/invalidate",
+            "params": [
+              {
+                "name": "codebase_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Invalidate Findings"
+        },
+        {
+          "info": {
+            "name": "List Codebases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/findings",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List every codebase the principal can see.\n\nPer-customer keys see only codebases that have at least one logged\nrun under their (org_id, project_id). Static keys see everything\nwhen no scope is supplied; otherwise the same scope filter applies."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

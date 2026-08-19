@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ReasonBlocks Billing API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Billing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Meter",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/billing/meter",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "days",
+                "value": "",
+                "type": "query",
+                "description": "If >0, include per-day timeseries for the trailing N days."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return ``{plan, used, cap, over_cap, org_id}`` for an org.\n\nAuthorization:\n  * Static (admin) keys may query any org.\n  * Per-customer keys may only query their own org -- the principal's\n    ``org_id`` is the source of truth; a mismatch with the query\n    param is rejected.\n  * JWT (dashboard) callers must have ``org_id`` in their\n    ``allowed_orgs``."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

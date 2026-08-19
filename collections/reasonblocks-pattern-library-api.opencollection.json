@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ReasonBlocks Billing Pattern Library API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pattern Library",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Patterns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/library/patterns",
+            "params": [
+              {
+                "name": "tier",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List patterns scoped to the caller's tenant.\n\nPer-customer keys: only their own E1 patterns. E2/E3 are commons /\nuniversal so they're returned to anyone (no per-tenant data).\nStatic keys: optional ``?org_id=`` filter; otherwise all patterns.\nJWT (dashboard): must pass ``?org_id=`` and the org must be in\n``allowed_orgs``."
+        },
+        {
+          "info": {
+            "name": "Patch Pattern",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/library/patterns/:tier/:pattern_id",
+            "params": [
+              {
+                "name": "tier",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pattern_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Patch Pattern"
+        },
+        {
+          "info": {
+            "name": "Delete Pattern",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/library/patterns/:tier/:pattern_id",
+            "params": [
+              {
+                "name": "tier",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pattern_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "API key (EventSource fallback)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete Pattern"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

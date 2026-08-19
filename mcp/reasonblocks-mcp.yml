@@ -2,14 +2,12 @@ generated: '2026-07-21'
 method: derived
 status: candidate
 source: openapi/reasonblocks-openapi-original.json
-notes: >-
-  No official hosted/remote ReasonBlocks MCP server was found (no listing in the
-  MCP registry, no @modelcontextprotocol package, no mcp.reasonblocks.com). This is
-  a DERIVED candidate tool list, one tool per REST operationId, so an MCP server
-  could be forged from the published OpenAPI. ReasonBlocks does ship SDK "tool
-  factories" (make_claude_tools / make_langchain_tools / make_openai_tools) that
-  expose CodebaseMemory + ImportGraph as agent-framework tools, but those are
-  in-process framework tools, not an MCP server.
+notes: No official hosted/remote ReasonBlocks MCP server was found (no listing in the MCP registry, no
+  @modelcontextprotocol package, no mcp.reasonblocks.com). This is a DERIVED candidate tool list, one
+  tool per REST operationId, so an MCP server could be forged from the published OpenAPI. ReasonBlocks
+  does ship SDK "tool factories" (make_claude_tools / make_langchain_tools / make_openai_tools) that expose
+  CodebaseMemory + ImportGraph as agent-framework tools, but those are in-process framework tools, not
+  an MCP server.
 server:
   name: reasonblocks
   transport: http
@@ -48,3 +46,9 @@ tools:
 - name: finish_run
   description: Finish a monitor telemetry run.
   source_operation: openapi/reasonblocks-openapi-original.json#finish_run_v1_monitor_runs__run_id__finish_post
+deployment:
+  mode: none
+  verified: derived
+  tools: 11
+  checked: '2026-08-12'
+  source: catalog MCP census
