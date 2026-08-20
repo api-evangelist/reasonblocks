@@ -42,6 +42,17 @@ tags:
 - Developer Tools
 - Token Optimization
 - Agent Steering
+- Machine-Learning
+- Artificial Intelligence
+- SDK
+tags_raw:
+- Company
+- AI Agents
+- Agent Observability
+- LLM
+- Developer Tools
+- Token Optimization
+- Agent Steering
 - Machine Learning
 - Artificial Intelligence
 - SDK
@@ -100,6 +111,8 @@ apis:
   humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
   baseURL: https://rb-api.reasonblocks.com
   tags:
+  - Monitors
+  tags_raw:
   - monitor
   properties:
   - type: OpenAPI
