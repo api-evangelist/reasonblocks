@@ -1,13 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: ReasonBlocks Billing Patterns & Traces API
-  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
-
-
-    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
-
-
-    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  title: ReasonBlocks Patterns & Traces API
+  description: ReasonBlocks REST API.
   version: 0.1.0
 tags:
 - name: Patterns & Traces
@@ -91,52 +85,64 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    InjectedPattern:
+    ETraceItem:
       properties:
+        tier:
+          type: string
+          title: Tier
+        level:
+          type: string
+          title: Level
+          default: ''
         pattern_id:
           type: string
           maxLength: 256
           title: Pattern Id
-        tier:
-          type: string
-          maxLength: 32
-          title: Tier
+          default: ''
         similarity:
           type: number
           title: Similarity
           default: 0.0
-      type: object
-      required:
-      - pattern_id
-      - tier
-      title: InjectedPattern
-      description: One pattern the SDK injected during a call.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
+        failure_type:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Failure Type
+        fields:
+          additionalProperties: true
           type: object
-          title: Context
+          title: Fields
+        model_family:
+          type: string
+          maxLength: 128
+          title: Model Family
+          default: ''
+        insight:
+          type: string
+          maxLength: 64000
+          title: Insight
+          default: ''
+        source_trace_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Source Trace Id
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - tier
+      title: ETraceItem
+      description: 'One retrieved pattern.
+
+
+        The SDK treats ``fields`` as the source of truth and feeds it to
+
+        ``reasonblocks.format_routing.render_pattern(tier, model, fields)``.
+
+        The legacy ``insight`` string is preserved only when a caller sends one
+
+        in from somewhere else — this server never populates it.'
     TraceCallRecord:
       properties:
         call_index:
@@ -224,6 +230,15 @@ components:
         captures the tool-call/tool-result pairs for this call pulled from
 
         LangChain intermediate_steps.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     TraceRetrieveRequest:
       properties:
         context:
@@ -276,15 +291,120 @@ components:
         and the server both normalize to lowercase ``e1``/``e2``/``e3``. ``tier``
 
         is the preferred field for new callers.'
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TraceRetrieveResponse:
+      properties:
+        traces:
+          items:
+            $ref: '#/components/schemas/ETraceItem'
+          type: array
+          title: Traces
+      type: object
+      required:
+      - traces
+      title: TraceRetrieveResponse
+    InjectedPattern:
+      properties:
+        pattern_id:
+          type: string
+          maxLength: 256
+          title: Pattern Id
+        tier:
+          type: string
+          maxLength: 32
+          title: Tier
+        similarity:
+          type: number
+          title: Similarity
+          default: 0.0
+      type: object
+      required:
+      - pattern_id
+      - tier
+      title: InjectedPattern
+      description: One pattern the SDK injected during a call.
+    TraceManifest:
+      properties:
+        trace_id:
+          type: string
+          maxLength: 256
+          title: Trace Id
+        customer_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Customer Id
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        total_calls:
+          type: integer
+          maximum: 10000.0
+          minimum: 0.0
+          title: Total Calls
+          default: 0
+        outcome_status:
+          type: string
+          maxLength: 64
+          title: Outcome Status
+          default: success
+        total_tokens:
+          type: integer
+          minimum: 0.0
+          title: Total Tokens
+          default: 0
+        monitors_fired_summary:
+          items:
+            type: string
+          type: array
+          maxItems: 128
+          title: Monitors Fired Summary
+        task_context:
+          type: string
+          maxLength: 64000
+          title: Task Context
+          default: ''
+        started_at:
+          type: number
+          title: Started At
+          default: 0.0
+        ended_at:
+          type: number
+          title: Ended At
+          default: 0.0
+      type: object
+      required:
+      - trace_id
+      title: TraceManifest
+      description: Session-level manifest the SDK sends with the per-call records.
     TraceStoreRequest:
       properties:
         trace_id:
@@ -366,132 +486,6 @@ components:
       - step_index
       title: StepPayload
       description: Legacy per-step shape posted by ``store_trace`` (pre-v2).
-    ETraceItem:
-      properties:
-        tier:
-          type: string
-          title: Tier
-        level:
-          type: string
-          title: Level
-          default: ''
-        pattern_id:
-          type: string
-          maxLength: 256
-          title: Pattern Id
-          default: ''
-        similarity:
-          type: number
-          title: Similarity
-          default: 0.0
-        failure_type:
-          anyOf:
-          - type: string
-            maxLength: 128
-          - type: 'null'
-          title: Failure Type
-        fields:
-          additionalProperties: true
-          type: object
-          title: Fields
-        model_family:
-          type: string
-          maxLength: 128
-          title: Model Family
-          default: ''
-        insight:
-          type: string
-          maxLength: 64000
-          title: Insight
-          default: ''
-        source_trace_id:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Source Trace Id
-      type: object
-      required:
-      - tier
-      title: ETraceItem
-      description: 'One retrieved pattern.
-
-
-        The SDK treats ``fields`` as the source of truth and feeds it to
-
-        ``reasonblocks.format_routing.render_pattern(tier, model, fields)``.
-
-        The legacy ``insight`` string is preserved only when a caller sends one
-
-        in from somewhere else — this server never populates it.'
-    TraceManifest:
-      properties:
-        trace_id:
-          type: string
-          maxLength: 256
-          title: Trace Id
-        customer_id:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Customer Id
-        model:
-          type: string
-          maxLength: 128
-          title: Model
-          default: ''
-        total_calls:
-          type: integer
-          maximum: 10000.0
-          minimum: 0.0
-          title: Total Calls
-          default: 0
-        outcome_status:
-          type: string
-          maxLength: 64
-          title: Outcome Status
-          default: success
-        total_tokens:
-          type: integer
-          minimum: 0.0
-          title: Total Tokens
-          default: 0
-        monitors_fired_summary:
-          items:
-            type: string
-          type: array
-          maxItems: 128
-          title: Monitors Fired Summary
-        task_context:
-          type: string
-          maxLength: 64000
-          title: Task Context
-          default: ''
-        started_at:
-          type: number
-          title: Started At
-          default: 0.0
-        ended_at:
-          type: number
-          title: Ended At
-          default: 0.0
-      type: object
-      required:
-      - trace_id
-      title: TraceManifest
-      description: Session-level manifest the SDK sends with the per-call records.
-    TraceRetrieveResponse:
-      properties:
-        traces:
-          items:
-            $ref: '#/components/schemas/ETraceItem'
-          type: array
-          title: Traces
-      type: object
-      required:
-      - traces
-      title: TraceRetrieveResponse
   securitySchemes:
     HTTPBearer:
       type: http

@@ -1,13 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: ReasonBlocks Billing Codebase Findings API
-  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
-
-
-    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
-
-
-    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  title: ReasonBlocks Codebase Findings API
+  description: ReasonBlocks REST API.
   version: 0.1.0
 tags:
 - name: Codebase Findings
@@ -379,46 +373,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    FindingListResponse:
-      properties:
-        findings:
-          items:
-            additionalProperties: true
-            type: object
-          type: array
-          title: Findings
-        count:
-          type: integer
-          title: Count
-          default: 0
-      type: object
-      title: FindingListResponse
     HTTPValidationError:
       properties:
         detail:
@@ -428,48 +382,16 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    FindingSearchResponse:
+    CodebaseListResponse:
       properties:
-        results:
+        codebases:
           items:
             additionalProperties: true
             type: object
           type: array
-          title: Results
+          title: Codebases
       type: object
-      title: FindingSearchResponse
-    FindingSearchRequest:
-      properties:
-        query:
-          type: string
-          maxLength: 2000
-          minLength: 1
-          title: Query
-        top_k:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Top K
-          default: 5
-        score_threshold:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Score Threshold
-          default: 0.5
-      type: object
-      required:
-      - query
-      title: FindingSearchRequest
-      description: Body for POST /findings/{codebase_id}/search -- semantic recall query.
-    FindingInvalidateResponse:
-      properties:
-        invalidated:
-          type: integer
-          title: Invalidated
-          default: 0
-      type: object
-      title: FindingInvalidateResponse
+      title: CodebaseListResponse
     FindingStoreResponse:
       properties:
         finding_id:
@@ -502,6 +424,67 @@ components:
           title: Finding Type
       type: object
       title: FindingPatch
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FindingInvalidateRequest:
+      properties:
+        file_paths:
+          items:
+            type: string
+          type: array
+          maxItems: 1024
+          title: File Paths
+      type: object
+      title: FindingInvalidateRequest
+      description: Invalidate cached findings whose file_path matches one of the listed paths.
+    FindingListResponse:
+      properties:
+        findings:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Findings
+        count:
+          type: integer
+          title: Count
+          default: 0
+      type: object
+      title: FindingListResponse
+    FindingSearchResponse:
+      properties:
+        results:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Results
+      type: object
+      title: FindingSearchResponse
     FindingStoreRequest:
       properties:
         content:
@@ -530,27 +513,38 @@ components:
       - content
       title: FindingStoreRequest
       description: Body for POST /findings/{codebase_id} -- one finding to persist.
-    FindingInvalidateRequest:
+    FindingInvalidateResponse:
       properties:
-        file_paths:
-          items:
-            type: string
-          type: array
-          maxItems: 1024
-          title: File Paths
+        invalidated:
+          type: integer
+          title: Invalidated
+          default: 0
       type: object
-      title: FindingInvalidateRequest
-      description: Invalidate cached findings whose file_path matches one of the listed paths.
-    CodebaseListResponse:
+      title: FindingInvalidateResponse
+    FindingSearchRequest:
       properties:
-        codebases:
-          items:
-            additionalProperties: true
-            type: object
-          type: array
-          title: Codebases
+        query:
+          type: string
+          maxLength: 2000
+          minLength: 1
+          title: Query
+        top_k:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Top K
+          default: 5
+        score_threshold:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Score Threshold
+          default: 0.5
       type: object
-      title: CodebaseListResponse
+      required:
+      - query
+      title: FindingSearchRequest
+      description: Body for POST /findings/{codebase_id}/search -- semantic recall query.
   securitySchemes:
     HTTPBearer:
       type: http

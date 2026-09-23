@@ -1,30 +1,46 @@
 {
   "provider": "reasonblocks",
   "sources": [
-    "reasonblocks-billing-api-openapi.yml",
-    "reasonblocks-codebase-findings-api-openapi.yml",
-    "reasonblocks-health-api-openapi.yml",
-    "reasonblocks-monitor-api-openapi.yml",
-    "reasonblocks-monitor-telemetry-api-openapi.yml",
-    "reasonblocks-monitors-api-openapi.yml",
-    "reasonblocks-pattern-library-api-openapi.yml",
-    "reasonblocks-patterns-traces-api-openapi.yml",
-    "reasonblocks-scoring-api-openapi.yml"
+    "_original/reasonblocks-openapi-original.json"
   ],
   "outputs": [
     "reasonblocks-billing-api-openapi.yml",
     "reasonblocks-codebase-findings-api-openapi.yml",
     "reasonblocks-health-api-openapi.yml",
-    "reasonblocks-monitor-api-openapi.yml",
     "reasonblocks-monitor-telemetry-api-openapi.yml",
     "reasonblocks-monitors-api-openapi.yml",
     "reasonblocks-pattern-library-api-openapi.yml",
     "reasonblocks-patterns-traces-api-openapi.yml",
-    "reasonblocks-scoring-api-openapi.yml"
+    "reasonblocks-scoring-api-openapi.yml",
+    "reasonblocks-monitor-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "reasonblocks-openapi-original.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "reasonblocks-openapi-original.json: tagged paths GET /health -> Health",
+    "reasonblocks-openapi-original.json: declared missing tag: Billing",
+    "reasonblocks-openapi-original.json: declared missing tag: Codebase Findings",
+    "reasonblocks-openapi-original.json: declared missing tag: Health",
+    "reasonblocks-openapi-original.json: declared missing tag: Monitor Telemetry",
+    "reasonblocks-openapi-original.json: declared missing tag: Monitors",
+    "reasonblocks-openapi-original.json: declared missing tag: Pattern Library",
+    "reasonblocks-openapi-original.json: declared missing tag: Patterns & Traces",
+    "reasonblocks-openapi-original.json: declared missing tag: Scoring",
+    "reasonblocks-openapi-original.json: declared missing tag: monitor",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "reasonblocks-billing-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-codebase-findings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-monitor-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-monitor-telemetry-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-monitors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-pattern-library-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-patterns-traces-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "reasonblocks-scoring-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

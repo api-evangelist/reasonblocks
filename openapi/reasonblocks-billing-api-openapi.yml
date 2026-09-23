@@ -1,13 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: ReasonBlocks Billing API
-  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
-
-
-    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
-
-
-    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  description: ReasonBlocks REST API.
   version: 0.1.0
 tags:
 - name: Billing
@@ -17,7 +11,22 @@ paths:
       tags:
       - Billing
       summary: Get Meter
-      description: "Return ``{plan, used, cap, over_cap, org_id}`` for an org.\n\nAuthorization:\n  * Static (admin) keys may query any org.\n  * Per-customer keys may only query their own org -- the principal's\n    ``org_id`` is the source of truth; a mismatch with the query\n    param is rejected.\n  * JWT (dashboard) callers must have ``org_id`` in their\n    ``allowed_orgs``."
+      description: 'Return ``{plan, used, cap, over_cap, org_id}`` for an org.
+
+
+        Authorization:
+
+        * Static (admin) keys may query any org.
+
+        * Per-customer keys may only query their own org -- the principal''s
+
+        ``org_id`` is the source of truth; a mismatch with the query
+
+        param is rejected.
+
+        * JWT (dashboard) callers must have ``org_id`` in their
+
+        ``allowed_orgs``.'
       operationId: get_meter_v1_billing_meter_get
       security:
       - HTTPBearer: []
@@ -68,15 +77,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -103,6 +103,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     HTTPBearer:
       type: http

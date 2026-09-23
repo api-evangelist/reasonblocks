@@ -1,21 +1,15 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: ReasonBlocks Billing monitor API
-  description: 'ReasonBlocks REST API. Public routes are versioned under `/v1/`.
-
-
-    **Auth:** every route requires `Authorization: Bearer <api_key>`. Issue keys from the dashboard (per-org), or set `REASONBLOCKS_KEYS` for static dev keys. See `docs/rest-api-setup.md` and `docs/custom-harness-quickstart.md` in the repo for end-to-end setup.
-
-
-    **Back-compat:** unversioned aliases (e.g. `POST /traces/retrieve`) remain mounted for already-deployed SDK clients but are intentionally hidden from this schema. New integrations should target `/v1/...`.'
+  title: ReasonBlocks Monitor API
+  description: ReasonBlocks REST API.
   version: 0.1.0
 tags:
-- name: monitor
+- name: Monitor
 paths:
   /v1/monitor/me:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: Me
       description: 'Return the caller''s identity + superuser flag. The website''s
 
@@ -54,7 +48,7 @@ paths:
   /v1/monitor/runs:
     post:
       tags:
-      - monitor
+      - Monitor
       summary: Start Run
       operationId: start_run_v1_monitor_runs_post
       security:
@@ -93,7 +87,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     get:
       tags:
-      - monitor
+      - Monitor
       summary: List Runs
       operationId: list_runs_v1_monitor_runs_get
       security:
@@ -180,7 +174,7 @@ paths:
   /v1/monitor/runs/{run_id}/finish:
     post:
       tags:
-      - monitor
+      - Monitor
       summary: Finish Run
       operationId: finish_run_v1_monitor_runs__run_id__finish_post
       security:
@@ -226,7 +220,7 @@ paths:
   /v1/monitor/runs/{run_id}/steps:
     post:
       tags:
-      - monitor
+      - Monitor
       summary: Log Step
       operationId: log_step_v1_monitor_runs__run_id__steps_post
       security:
@@ -270,7 +264,7 @@ paths:
   /v1/monitor/runs/{run_id}:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: Run Detail
       operationId: run_detail_v1_monitor_runs__run_id__get
       security:
@@ -310,7 +304,7 @@ paths:
   /v1/monitor/health-summary:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: Monitor Health Summary
       operationId: monitor_health_summary_v1_monitor_health_summary_get
       security:
@@ -360,7 +354,7 @@ paths:
   /v1/monitor/experiments/{experiment_id}/report:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: Experiment Report
       description: 'Per-arm A/B report for one experiment: cost/token deltas (primary),
 
@@ -437,7 +431,7 @@ paths:
   /v1/monitor/profiles:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: List Profiles
       description: 'Every monitor profile visible at this scope. Built-ins always
 
@@ -495,7 +489,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-      - monitor
+      - Monitor
       summary: Create Profile
       description: 'Create a custom profile. Profile IDs that collide with a built-in
 
@@ -546,7 +540,7 @@ paths:
   /v1/monitor/profiles/{profile_id}:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: Get Profile
       operationId: get_profile_v1_monitor_profiles__profile_id__get
       security:
@@ -601,7 +595,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     patch:
       tags:
-      - monitor
+      - Monitor
       summary: Update Profile
       description: 'Update an existing custom profile. Built-ins cannot be patched.
 
@@ -651,7 +645,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     delete:
       tags:
-      - monitor
+      - Monitor
       summary: Remove Profile
       description: 'Delete a custom profile. Built-ins cannot be deleted. project_id
 
@@ -719,7 +713,7 @@ paths:
   /v1/monitor/scorers:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: List Scorers
       description: 'The closed scorer registry the upstream pipeline understands.
 
@@ -762,9 +756,20 @@ paths:
   /v1/monitor/stream:
     get:
       tags:
-      - monitor
+      - Monitor
       summary: Monitor Stream
-      description: "SSE stream of ``monitor_steps`` writes. Filter via ``org_id`` /\n``project_id`` to match the dashboard's current scope.\n\nEvent types:\n  * ``ready`` -- empty payload, sent on connect\n  * ``step``  -- ``{run_id, step_index, org_id, project_id, total_score, fired}``\n                 payload (matches the NOTIFY trigger envelope)."
+      description: 'SSE stream of ``monitor_steps`` writes. Filter via ``org_id`` /
+
+        ``project_id`` to match the dashboard''s current scope.
+
+
+        Event types:
+
+        * ``ready`` -- empty payload, sent on connect
+
+        * ``step`` -- ``{run_id, step_index, org_id, project_id, total_score, fired}``
+
+        payload (matches the NOTIFY trigger envelope).'
       operationId: monitor_stream_v1_monitor_stream_get
       security:
       - HTTPBearer: []
@@ -809,60 +814,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    MonitorStepLogResponse:
-      properties:
-        scores:
-          additionalProperties:
-            type: number
-          type: object
-          title: Scores
-        total_score:
-          type: number
-          title: Total Score
-          default: 0.0
-        fired:
-          items:
-            type: string
-          type: array
-          title: Fired
-      type: object
-      title: MonitorStepLogResponse
-      description: The score bundle computed + persisted for the step just logged.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    MonitorRunFinish:
-      properties:
-        outcome:
-          type: string
-          maxLength: 64
-          title: Outcome
-          default: ''
-      type: object
-      title: MonitorRunFinish
     HTTPValidationError:
       properties:
         detail:
@@ -872,61 +823,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    MonitorRunStart:
-      properties:
-        run_id:
-          type: string
-          maxLength: 256
-          pattern: ^[A-Za-z0-9_\-./:@]+$
-          title: Run Id
-        agent_name:
-          type: string
-          maxLength: 256
-          title: Agent Name
-          default: ''
-        task:
-          type: string
-          maxLength: 4000
-          title: Task
-          default: ''
-        model:
-          type: string
-          maxLength: 128
-          title: Model
-          default: ''
-        framework:
-          type: string
-          maxLength: 64
-          title: Framework
-          default: ''
-        codebase_id:
-          type: string
-          maxLength: 256
-          title: Codebase Id
-          default: ''
-        org_id:
-          type: string
-          maxLength: 256
-          title: Org Id
-          default: default
-        project_id:
-          type: string
-          maxLength: 256
-          title: Project Id
-          default: default
-        task_profile:
-          type: string
-          maxLength: 64
-          title: Task Profile
-          default: coding
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-      type: object
-      required:
-      - run_id
-      title: MonitorRunStart
     MonitorStepLog:
       properties:
         step_index:
@@ -1025,6 +921,115 @@ components:
       required:
       - step_index
       title: MonitorStepLog
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MonitorRunStart:
+      properties:
+        run_id:
+          type: string
+          maxLength: 256
+          pattern: ^[A-Za-z0-9_\-./:@]+$
+          title: Run Id
+        agent_name:
+          type: string
+          maxLength: 256
+          title: Agent Name
+          default: ''
+        task:
+          type: string
+          maxLength: 4000
+          title: Task
+          default: ''
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        framework:
+          type: string
+          maxLength: 64
+          title: Framework
+          default: ''
+        codebase_id:
+          type: string
+          maxLength: 256
+          title: Codebase Id
+          default: ''
+        org_id:
+          type: string
+          maxLength: 256
+          title: Org Id
+          default: default
+        project_id:
+          type: string
+          maxLength: 256
+          title: Project Id
+          default: default
+        task_profile:
+          type: string
+          maxLength: 64
+          title: Task Profile
+          default: coding
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+      type: object
+      required:
+      - run_id
+      title: MonitorRunStart
+    MonitorRunFinish:
+      properties:
+        outcome:
+          type: string
+          maxLength: 64
+          title: Outcome
+          default: ''
+      type: object
+      title: MonitorRunFinish
+    MonitorStepLogResponse:
+      properties:
+        scores:
+          additionalProperties:
+            type: number
+          type: object
+          title: Scores
+        total_score:
+          type: number
+          title: Total Score
+          default: 0.0
+        fired:
+          items:
+            type: string
+          type: array
+          title: Fired
+      type: object
+      title: MonitorStepLogResponse
+      description: The score bundle computed + persisted for the step just logged.
   securitySchemes:
     HTTPBearer:
       type: http
