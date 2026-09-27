@@ -55,7 +55,7 @@ tags:
 - Developer Tools
 - Token Optimization
 - Agent Steering
-- Machine-Learning
+- Machine Learning
 - Artificial Intelligence
 - SDK
 tags_raw:
@@ -69,6 +69,7 @@ tags_raw:
 - Machine Learning
 - Artificial Intelligence
 - SDK
+- Machine-Learning
 apis:
 - aid: reasonblocks:reasonblocks-billing-api
   name: ReasonBlocks Billing API
@@ -119,7 +120,7 @@ apis:
   - type: GettingStarted
     url: https://docs.reasonblocks.com/quickstart
 - aid: reasonblocks:reasonblocks-monitor-api
-  name: ReasonBlocks monitor API
+  name: ReasonBlocks Monitor API
   description: The monitor API from ReasonBlocks — 11 operation(s) for monitor.
   humanURL: https://docs.reasonblocks.com/api-reference/rest-api/overview
   baseURL: https://rb-api.reasonblocks.com

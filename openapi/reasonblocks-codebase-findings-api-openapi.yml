@@ -373,15 +373,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CodebaseListResponse:
       properties:
         codebases:
@@ -392,38 +383,6 @@ components:
           title: Codebases
       type: object
       title: CodebaseListResponse
-    FindingStoreResponse:
-      properties:
-        finding_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Finding Id
-        stored:
-          type: boolean
-          title: Stored
-          default: true
-      type: object
-      title: FindingStoreResponse
-    FindingPatch:
-      properties:
-        content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content
-        file_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: File Path
-        finding_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Finding Type
-      type: object
-      title: FindingPatch
     ValidationError:
       properties:
         loc:
@@ -450,6 +409,30 @@ components:
       - msg
       - type
       title: ValidationError
+    FindingSearchRequest:
+      properties:
+        query:
+          type: string
+          maxLength: 2000
+          minLength: 1
+          title: Query
+        top_k:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Top K
+          default: 5
+        score_threshold:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Score Threshold
+          default: 0.5
+      type: object
+      required:
+      - query
+      title: FindingSearchRequest
+      description: Body for POST /findings/{codebase_id}/search -- semantic recall query.
     FindingInvalidateRequest:
       properties:
         file_paths:
@@ -461,30 +444,23 @@ components:
       type: object
       title: FindingInvalidateRequest
       description: Invalidate cached findings whose file_path matches one of the listed paths.
-    FindingListResponse:
+    FindingInvalidateResponse:
       properties:
-        findings:
-          items:
-            additionalProperties: true
-            type: object
-          type: array
-          title: Findings
-        count:
+        invalidated:
           type: integer
-          title: Count
+          title: Invalidated
           default: 0
       type: object
-      title: FindingListResponse
-    FindingSearchResponse:
+      title: FindingInvalidateResponse
+    HTTPValidationError:
       properties:
-        results:
+        detail:
           items:
-            additionalProperties: true
-            type: object
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Results
+          title: Detail
       type: object
-      title: FindingSearchResponse
+      title: HTTPValidationError
     FindingStoreRequest:
       properties:
         content:
@@ -513,38 +489,62 @@ components:
       - content
       title: FindingStoreRequest
       description: Body for POST /findings/{codebase_id} -- one finding to persist.
-    FindingInvalidateResponse:
+    FindingListResponse:
       properties:
-        invalidated:
+        findings:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Findings
+        count:
           type: integer
-          title: Invalidated
+          title: Count
           default: 0
       type: object
-      title: FindingInvalidateResponse
-    FindingSearchRequest:
+      title: FindingListResponse
+    FindingSearchResponse:
       properties:
-        query:
-          type: string
-          maxLength: 2000
-          minLength: 1
-          title: Query
-        top_k:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Top K
-          default: 5
-        score_threshold:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Score Threshold
-          default: 0.5
+        results:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Results
       type: object
-      required:
-      - query
-      title: FindingSearchRequest
-      description: Body for POST /findings/{codebase_id}/search -- semantic recall query.
+      title: FindingSearchResponse
+    FindingPatch:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        file_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: File Path
+        finding_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finding Type
+      type: object
+      title: FindingPatch
+    FindingStoreResponse:
+      properties:
+        finding_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finding Id
+        stored:
+          type: boolean
+          title: Stored
+          default: true
+      type: object
+      title: FindingStoreResponse
   securitySchemes:
     HTTPBearer:
       type: http

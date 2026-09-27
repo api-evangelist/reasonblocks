@@ -814,15 +814,32 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     MonitorStepLog:
       properties:
         step_index:
@@ -921,32 +938,34 @@ components:
       required:
       - step_index
       title: MonitorStepLog
-    ValidationError:
+    MonitorStepLogResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
+        scores:
+          additionalProperties:
+            type: number
           type: object
-          title: Context
+          title: Scores
+        total_score:
+          type: number
+          title: Total Score
+          default: 0.0
+        fired:
+          items:
+            type: string
+          type: array
+          title: Fired
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: MonitorStepLogResponse
+      description: The score bundle computed + persisted for the step just logged.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     MonitorRunStart:
       properties:
         run_id:
@@ -1011,25 +1030,6 @@ components:
           default: ''
       type: object
       title: MonitorRunFinish
-    MonitorStepLogResponse:
-      properties:
-        scores:
-          additionalProperties:
-            type: number
-          type: object
-          title: Scores
-        total_score:
-          type: number
-          title: Total Score
-          default: 0.0
-        fired:
-          items:
-            type: string
-          type: array
-          title: Fired
-      type: object
-      title: MonitorStepLogResponse
-      description: The score bundle computed + persisted for the step just logged.
   securitySchemes:
     HTTPBearer:
       type: http

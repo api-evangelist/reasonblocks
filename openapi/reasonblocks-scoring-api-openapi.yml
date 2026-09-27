@@ -47,6 +47,29 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ScoreRequest:
+      properties:
+        text:
+          type: string
+          maxLength: 64000
+          title: Text
+          default: ''
+        context:
+          type: string
+          maxLength: 64000
+          title: Context
+          default: ''
+      type: object
+      title: ScoreRequest
     ValidationError:
       properties:
         loc:
@@ -73,15 +96,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ScoreResponse:
       properties:
         difficulty:
@@ -91,20 +105,6 @@ components:
       required:
       - difficulty
       title: ScoreResponse
-    ScoreRequest:
-      properties:
-        text:
-          type: string
-          maxLength: 64000
-          title: Text
-          default: ''
-        context:
-          type: string
-          maxLength: 64000
-          title: Context
-          default: ''
-      type: object
-      title: ScoreRequest
   securitySchemes:
     HTTPBearer:
       type: http
