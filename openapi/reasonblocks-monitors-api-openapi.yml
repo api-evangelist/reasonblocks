@@ -46,6 +46,117 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    MonitorEvaluateRequest:
+      properties:
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        steps:
+          items:
+            $ref: '#/components/schemas/MonitorStep'
+          type: array
+          maxItems: 2000
+          title: Steps
+        task_profile:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Task Profile
+        weights:
+          anyOf:
+          - additionalProperties:
+              type: number
+            type: object
+          - type: 'null'
+          title: Weights
+        org_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Org Id
+        project_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Project Id
+      type: object
+      title: MonitorEvaluateRequest
+      description: "Request body for /monitors/evaluate.\n\nWeight resolution order (lowest precedence to highest):\n\n1. Server defaults (``MONITOR_WEIGHTS`` in scoring/monitors.py).\n2. Profile preset selected by ``task_profile`` (built-in: ``coding``,\n   ``pr_review``; customer-defined profiles are hydrated into the\n   same registry from the ``monitor_profiles`` table at startup).\n3. Explicit ``weights`` dict on this request — partial overrides are\n   fine; unspecified monitor names fall through to the profile/default."
+    MonitorStep:
+      properties:
+        thought:
+          type: string
+          maxLength: 64000
+          title: Thought
+          default: ''
+        action:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Action
+        action_input:
+          title: Action Input
+        observation:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Observation
+        observation_is_error:
+          type: boolean
+          title: Observation Is Error
+          default: false
+      type: object
+      title: MonitorStep
+      description: 'One step in the SDK-side trace, flattened for over-the-wire transit.
+
+
+        Strict shape: untrusted clients can''t inject arbitrary keys. If a new
+
+        field is needed, add it to this model rather than relying on
+
+        ``extra="allow"``.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     MonitorEvaluateResponse:
       properties:
         inject:
@@ -99,117 +210,6 @@ components:
         user-visible behaviour; everything else is audit metadata for the
 
         SDK''s per-call records.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    MonitorEvaluateRequest:
-      properties:
-        model:
-          type: string
-          maxLength: 128
-          title: Model
-          default: ''
-        steps:
-          items:
-            $ref: '#/components/schemas/MonitorStep'
-          type: array
-          maxItems: 2000
-          title: Steps
-        task_profile:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: Task Profile
-        weights:
-          anyOf:
-          - additionalProperties:
-              type: number
-            type: object
-          - type: 'null'
-          title: Weights
-        org_id:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Org Id
-        project_id:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Project Id
-      type: object
-      title: MonitorEvaluateRequest
-      description: "Request body for /monitors/evaluate.\n\nWeight resolution order (lowest precedence to highest):\n\n1. Server defaults (``MONITOR_WEIGHTS`` in scoring/monitors.py).\n2. Profile preset selected by ``task_profile`` (built-in: ``coding``,\n   ``pr_review``; customer-defined profiles are hydrated into the\n   same registry from the ``monitor_profiles`` table at startup).\n3. Explicit ``weights`` dict on this request — partial overrides are\n   fine; unspecified monitor names fall through to the profile/default."
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    MonitorStep:
-      properties:
-        thought:
-          type: string
-          maxLength: 64000
-          title: Thought
-          default: ''
-        action:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Action
-        action_input:
-          title: Action Input
-        observation:
-          anyOf:
-          - type: string
-            maxLength: 64000
-          - type: 'null'
-          title: Observation
-        observation_is_error:
-          type: boolean
-          title: Observation Is Error
-          default: false
-      type: object
-      title: MonitorStep
-      description: 'One step in the SDK-side trace, flattened for over-the-wire transit.
-
-
-        Strict shape: untrusted clients can''t inject arbitrary keys. If a new
-
-        field is needed, add it to this model rather than relying on
-
-        ``extra="allow"``.'
   securitySchemes:
     HTTPBearer:
       type: http

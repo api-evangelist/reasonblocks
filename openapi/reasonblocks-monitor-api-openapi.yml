@@ -814,32 +814,80 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
+    MonitorStepLogResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
+        scores:
+          additionalProperties:
+            type: number
           type: object
-          title: Context
+          title: Scores
+        total_score:
+          type: number
+          title: Total Score
+          default: 0.0
+        fired:
+          items:
+            type: string
+          type: array
+          title: Fired
+      type: object
+      title: MonitorStepLogResponse
+      description: The score bundle computed + persisted for the step just logged.
+    MonitorRunStart:
+      properties:
+        run_id:
+          type: string
+          maxLength: 256
+          pattern: ^[A-Za-z0-9_\-./:@]+$
+          title: Run Id
+        agent_name:
+          type: string
+          maxLength: 256
+          title: Agent Name
+          default: ''
+        task:
+          type: string
+          maxLength: 4000
+          title: Task
+          default: ''
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        framework:
+          type: string
+          maxLength: 64
+          title: Framework
+          default: ''
+        codebase_id:
+          type: string
+          maxLength: 256
+          title: Codebase Id
+          default: ''
+        org_id:
+          type: string
+          maxLength: 256
+          title: Org Id
+          default: default
+        project_id:
+          type: string
+          maxLength: 256
+          title: Project Id
+          default: default
+        task_profile:
+          type: string
+          maxLength: 64
+          title: Task Profile
+          default: coding
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - run_id
+      title: MonitorRunStart
     MonitorStepLog:
       properties:
         step_index:
@@ -938,25 +986,32 @@ components:
       required:
       - step_index
       title: MonitorStepLog
-    MonitorStepLogResponse:
+    ValidationError:
       properties:
-        scores:
-          additionalProperties:
-            type: number
-          type: object
-          title: Scores
-        total_score:
-          type: number
-          title: Total Score
-          default: 0.0
-        fired:
+        loc:
           items:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Fired
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: MonitorStepLogResponse
-      description: The score bundle computed + persisted for the step just logged.
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -966,61 +1021,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    MonitorRunStart:
-      properties:
-        run_id:
-          type: string
-          maxLength: 256
-          pattern: ^[A-Za-z0-9_\-./:@]+$
-          title: Run Id
-        agent_name:
-          type: string
-          maxLength: 256
-          title: Agent Name
-          default: ''
-        task:
-          type: string
-          maxLength: 4000
-          title: Task
-          default: ''
-        model:
-          type: string
-          maxLength: 128
-          title: Model
-          default: ''
-        framework:
-          type: string
-          maxLength: 64
-          title: Framework
-          default: ''
-        codebase_id:
-          type: string
-          maxLength: 256
-          title: Codebase Id
-          default: ''
-        org_id:
-          type: string
-          maxLength: 256
-          title: Org Id
-          default: default
-        project_id:
-          type: string
-          maxLength: 256
-          title: Project Id
-          default: default
-        task_profile:
-          type: string
-          maxLength: 64
-          title: Task Profile
-          default: coding
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-      type: object
-      required:
-      - run_id
-      title: MonitorRunStart
     MonitorRunFinish:
       properties:
         outcome:

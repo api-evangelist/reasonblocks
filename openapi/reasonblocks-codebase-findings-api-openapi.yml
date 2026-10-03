@@ -373,122 +373,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CodebaseListResponse:
-      properties:
-        codebases:
-          items:
-            additionalProperties: true
-            type: object
-          type: array
-          title: Codebases
-      type: object
-      title: CodebaseListResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    FindingSearchRequest:
-      properties:
-        query:
-          type: string
-          maxLength: 2000
-          minLength: 1
-          title: Query
-        top_k:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Top K
-          default: 5
-        score_threshold:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Score Threshold
-          default: 0.5
-      type: object
-      required:
-      - query
-      title: FindingSearchRequest
-      description: Body for POST /findings/{codebase_id}/search -- semantic recall query.
-    FindingInvalidateRequest:
-      properties:
-        file_paths:
-          items:
-            type: string
-          type: array
-          maxItems: 1024
-          title: File Paths
-      type: object
-      title: FindingInvalidateRequest
-      description: Invalidate cached findings whose file_path matches one of the listed paths.
-    FindingInvalidateResponse:
-      properties:
-        invalidated:
-          type: integer
-          title: Invalidated
-          default: 0
-      type: object
-      title: FindingInvalidateResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    FindingStoreRequest:
-      properties:
-        content:
-          type: string
-          maxLength: 8000
-          minLength: 1
-          title: Content
-        file_path:
-          type: string
-          maxLength: 512
-          title: File Path
-          default: ''
-        finding_type:
-          type: string
-          maxLength: 64
-          title: Finding Type
-          default: note
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-      type: object
-      required:
-      - content
-      title: FindingStoreRequest
-      description: Body for POST /findings/{codebase_id} -- one finding to persist.
     FindingListResponse:
       properties:
         findings:
@@ -503,16 +387,17 @@ components:
           default: 0
       type: object
       title: FindingListResponse
-    FindingSearchResponse:
+    FindingInvalidateRequest:
       properties:
-        results:
+        file_paths:
           items:
-            additionalProperties: true
-            type: object
+            type: string
           type: array
-          title: Results
+          maxItems: 1024
+          title: File Paths
       type: object
-      title: FindingSearchResponse
+      title: FindingInvalidateRequest
+      description: Invalidate cached findings whose file_path matches one of the listed paths.
     FindingPatch:
       properties:
         content:
@@ -545,6 +430,121 @@ components:
           default: true
       type: object
       title: FindingStoreResponse
+    FindingSearchResponse:
+      properties:
+        results:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Results
+      type: object
+      title: FindingSearchResponse
+    FindingSearchRequest:
+      properties:
+        query:
+          type: string
+          maxLength: 2000
+          minLength: 1
+          title: Query
+        top_k:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Top K
+          default: 5
+        score_threshold:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Score Threshold
+          default: 0.5
+      type: object
+      required:
+      - query
+      title: FindingSearchRequest
+      description: Body for POST /findings/{codebase_id}/search -- semantic recall query.
+    FindingInvalidateResponse:
+      properties:
+        invalidated:
+          type: integer
+          title: Invalidated
+          default: 0
+      type: object
+      title: FindingInvalidateResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CodebaseListResponse:
+      properties:
+        codebases:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Codebases
+      type: object
+      title: CodebaseListResponse
+    FindingStoreRequest:
+      properties:
+        content:
+          type: string
+          maxLength: 8000
+          minLength: 1
+          title: Content
+        file_path:
+          type: string
+          maxLength: 512
+          title: File Path
+          default: ''
+        finding_type:
+          type: string
+          maxLength: 64
+          title: Finding Type
+          default: note
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+      type: object
+      required:
+      - content
+      title: FindingStoreRequest
+      description: Body for POST /findings/{codebase_id} -- one finding to persist.
   securitySchemes:
     HTTPBearer:
       type: http

@@ -143,125 +143,6 @@ components:
         The legacy ``insight`` string is preserved only when a caller sends one
 
         in from somewhere else — this server never populates it.'
-    TraceStoreRequest:
-      properties:
-        trace_id:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Trace Id
-        steps:
-          items:
-            $ref: '#/components/schemas/StepPayload'
-          type: array
-          maxItems: 2000
-          title: Steps
-        outcome:
-          type: string
-          maxLength: 64
-          title: Outcome
-          default: ''
-        manifest:
-          anyOf:
-          - $ref: '#/components/schemas/TraceManifest'
-          - type: 'null'
-        calls:
-          items:
-            $ref: '#/components/schemas/TraceCallRecord'
-          type: array
-          maxItems: 2000
-          title: Calls
-      type: object
-      title: TraceStoreRequest
-      description: "POST /traces body.\n\nTwo supported shapes:\n\n* Legacy: ``trace_id`` + ``steps`` + ``outcome``. Returns 200.\n* v2 (trace collection): ``manifest`` + ``calls``. Returns 202;\n  storage + distillation + contrastive extraction run in a background\n  task so the SDK POST is near-instant."
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TraceRetrieveRequest:
-      properties:
-        context:
-          type: string
-          maxLength: 64000
-          minLength: 0
-          title: Context
-        level:
-          type: string
-          pattern: ^(e[123])?$
-          title: Level
-          default: ''
-        tier:
-          type: string
-          pattern: ^(e[123])?$
-          title: Tier
-          default: ''
-        top_k:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Top K
-          default: 5
-        model:
-          type: string
-          maxLength: 128
-          title: Model
-          default: ''
-        customer_id:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Customer Id
-        failure_type:
-          anyOf:
-          - type: string
-            maxLength: 128
-          - type: 'null'
-          title: Failure Type
-      type: object
-      required:
-      - context
-      title: TraceRetrieveRequest
-      description: 'Retrieval query.
-
-
-        ``level`` (legacy) and ``tier`` are accepted interchangeably — the SDK
-
-        and the server both normalize to lowercase ``e1``/``e2``/``e3``. ``tier``
-
-        is the preferred field for new callers.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     InjectedPattern:
       properties:
         pattern_id:
@@ -282,17 +163,6 @@ components:
       - tier
       title: InjectedPattern
       description: One pattern the SDK injected during a call.
-    TraceRetrieveResponse:
-      properties:
-        traces:
-          items:
-            $ref: '#/components/schemas/ETraceItem'
-          type: array
-          title: Traces
-      type: object
-      required:
-      - traces
-      title: TraceRetrieveResponse
     StepPayload:
       properties:
         step_index:
@@ -342,6 +212,15 @@ components:
       - step_index
       title: StepPayload
       description: Legacy per-step shape posted by ``store_trace`` (pre-v2).
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     TraceManifest:
       properties:
         trace_id:
@@ -399,6 +278,75 @@ components:
       - trace_id
       title: TraceManifest
       description: Session-level manifest the SDK sends with the per-call records.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TraceRetrieveResponse:
+      properties:
+        traces:
+          items:
+            $ref: '#/components/schemas/ETraceItem'
+          type: array
+          title: Traces
+      type: object
+      required:
+      - traces
+      title: TraceRetrieveResponse
+    TraceStoreRequest:
+      properties:
+        trace_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Trace Id
+        steps:
+          items:
+            $ref: '#/components/schemas/StepPayload'
+          type: array
+          maxItems: 2000
+          title: Steps
+        outcome:
+          type: string
+          maxLength: 64
+          title: Outcome
+          default: ''
+        manifest:
+          anyOf:
+          - $ref: '#/components/schemas/TraceManifest'
+          - type: 'null'
+        calls:
+          items:
+            $ref: '#/components/schemas/TraceCallRecord'
+          type: array
+          maxItems: 2000
+          title: Calls
+      type: object
+      title: TraceStoreRequest
+      description: "POST /traces body.\n\nTwo supported shapes:\n\n* Legacy: ``trace_id`` + ``steps`` + ``outcome``. Returns 200.\n* v2 (trace collection): ``manifest`` + ``calls``. Returns 202;\n  storage + distillation + contrastive extraction run in a background\n  task so the SDK POST is near-instant."
     TraceCallRecord:
       properties:
         call_index:
@@ -486,6 +434,58 @@ components:
         captures the tool-call/tool-result pairs for this call pulled from
 
         LangChain intermediate_steps.'
+    TraceRetrieveRequest:
+      properties:
+        context:
+          type: string
+          maxLength: 64000
+          minLength: 0
+          title: Context
+        level:
+          type: string
+          pattern: ^(e[123])?$
+          title: Level
+          default: ''
+        tier:
+          type: string
+          pattern: ^(e[123])?$
+          title: Tier
+          default: ''
+        top_k:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Top K
+          default: 5
+        model:
+          type: string
+          maxLength: 128
+          title: Model
+          default: ''
+        customer_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Customer Id
+        failure_type:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Failure Type
+      type: object
+      required:
+      - context
+      title: TraceRetrieveRequest
+      description: 'Retrieval query.
+
+
+        ``level`` (legacy) and ``tier`` are accepted interchangeably — the SDK
+
+        and the server both normalize to lowercase ``e1``/``e2``/``e3``. ``tier``
+
+        is the preferred field for new callers.'
   securitySchemes:
     HTTPBearer:
       type: http
