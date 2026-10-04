@@ -46,6 +46,59 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    MonitorEvaluateResponse:
+      properties:
+        inject:
+          type: boolean
+          title: Inject
+        intervention_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Intervention Text
+        failure_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Failure Type
+        injection_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Injection Path
+        intervention_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Intervention Source
+        fired:
+          items:
+            type: string
+          type: array
+          title: Fired
+        pattern_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pattern Id
+        scores:
+          additionalProperties:
+            type: number
+          type: object
+          title: Scores
+        composite:
+          type: number
+          title: Composite
+          default: 0.0
+      type: object
+      required:
+      - inject
+      title: MonitorEvaluateResponse
+      description: 'Response body. ``intervention_text`` is the only field that drives
+
+        user-visible behaviour; everything else is audit metadata for the
+
+        SDK''s per-call records.'
     MonitorEvaluateRequest:
       properties:
         model:
@@ -122,6 +175,15 @@ components:
         field is needed, add it to this model rather than relying on
 
         ``extra="allow"``.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -148,68 +210,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    MonitorEvaluateResponse:
-      properties:
-        inject:
-          type: boolean
-          title: Inject
-        intervention_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Intervention Text
-        failure_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Failure Type
-        injection_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Injection Path
-        intervention_source:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Intervention Source
-        fired:
-          items:
-            type: string
-          type: array
-          title: Fired
-        pattern_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Pattern Id
-        scores:
-          additionalProperties:
-            type: number
-          type: object
-          title: Scores
-        composite:
-          type: number
-          title: Composite
-          default: 0.0
-      type: object
-      required:
-      - inject
-      title: MonitorEvaluateResponse
-      description: 'Response body. ``intervention_text`` is the only field that drives
-
-        user-visible behaviour; everything else is audit metadata for the
-
-        SDK''s per-call records.'
   securitySchemes:
     HTTPBearer:
       type: http

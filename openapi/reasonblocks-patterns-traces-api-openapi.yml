@@ -85,142 +85,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ETraceItem:
-      properties:
-        tier:
-          type: string
-          title: Tier
-        level:
-          type: string
-          title: Level
-          default: ''
-        pattern_id:
-          type: string
-          maxLength: 256
-          title: Pattern Id
-          default: ''
-        similarity:
-          type: number
-          title: Similarity
-          default: 0.0
-        failure_type:
-          anyOf:
-          - type: string
-            maxLength: 128
-          - type: 'null'
-          title: Failure Type
-        fields:
-          additionalProperties: true
-          type: object
-          title: Fields
-        model_family:
-          type: string
-          maxLength: 128
-          title: Model Family
-          default: ''
-        insight:
-          type: string
-          maxLength: 64000
-          title: Insight
-          default: ''
-        source_trace_id:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Source Trace Id
-      type: object
-      required:
-      - tier
-      title: ETraceItem
-      description: 'One retrieved pattern.
-
-
-        The SDK treats ``fields`` as the source of truth and feeds it to
-
-        ``reasonblocks.format_routing.render_pattern(tier, model, fields)``.
-
-        The legacy ``insight`` string is preserved only when a caller sends one
-
-        in from somewhere else — this server never populates it.'
-    InjectedPattern:
-      properties:
-        pattern_id:
-          type: string
-          maxLength: 256
-          title: Pattern Id
-        tier:
-          type: string
-          maxLength: 32
-          title: Tier
-        similarity:
-          type: number
-          title: Similarity
-          default: 0.0
-      type: object
-      required:
-      - pattern_id
-      - tier
-      title: InjectedPattern
-      description: One pattern the SDK injected during a call.
-    StepPayload:
-      properties:
-        step_index:
-          type: integer
-          maximum: 10000.0
-          minimum: 0.0
-          title: Step Index
-        thought:
-          type: string
-          maxLength: 64000
-          title: Thought
-          default: ''
-        action:
-          anyOf:
-          - type: string
-            maxLength: 256
-          - type: 'null'
-          title: Action
-        action_input:
-          anyOf:
-          - type: string
-            maxLength: 64000
-          - type: 'null'
-          title: Action Input
-        observation:
-          anyOf:
-          - type: string
-            maxLength: 64000
-          - type: 'null'
-          title: Observation
-        difficulty:
-          type: number
-          title: Difficulty
-          default: 0.0
-        state:
-          type: string
-          maxLength: 32
-          title: State
-          default: INIT
-        tokens_used:
-          type: integer
-          minimum: 0.0
-          title: Tokens Used
-          default: 0
-      type: object
-      required:
-      - step_index
-      title: StepPayload
-      description: Legacy per-step shape posted by ``store_trace`` (pre-v2).
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     TraceManifest:
       properties:
         trace_id:
@@ -278,43 +142,26 @@ components:
       - trace_id
       title: TraceManifest
       description: Session-level manifest the SDK sends with the per-call records.
-    ValidationError:
+    InjectedPattern:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        pattern_id:
           type: string
-          title: Message
-        type:
+          maxLength: 256
+          title: Pattern Id
+        tier:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          maxLength: 32
+          title: Tier
+        similarity:
+          type: number
+          title: Similarity
+          default: 0.0
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TraceRetrieveResponse:
-      properties:
-        traces:
-          items:
-            $ref: '#/components/schemas/ETraceItem'
-          type: array
-          title: Traces
-      type: object
-      required:
-      - traces
-      title: TraceRetrieveResponse
+      - pattern_id
+      - tier
+      title: InjectedPattern
+      description: One pattern the SDK injected during a call.
     TraceStoreRequest:
       properties:
         trace_id:
@@ -347,6 +194,17 @@ components:
       type: object
       title: TraceStoreRequest
       description: "POST /traces body.\n\nTwo supported shapes:\n\n* Legacy: ``trace_id`` + ``steps`` + ``outcome``. Returns 200.\n* v2 (trace collection): ``manifest`` + ``calls``. Returns 202;\n  storage + distillation + contrastive extraction run in a background\n  task so the SDK POST is near-instant."
+    TraceRetrieveResponse:
+      properties:
+        traces:
+          items:
+            $ref: '#/components/schemas/ETraceItem'
+          type: array
+          title: Traces
+      type: object
+      required:
+      - traces
+      title: TraceRetrieveResponse
     TraceCallRecord:
       properties:
         call_index:
@@ -434,6 +292,99 @@ components:
         captures the tool-call/tool-result pairs for this call pulled from
 
         LangChain intermediate_steps.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ETraceItem:
+      properties:
+        tier:
+          type: string
+          title: Tier
+        level:
+          type: string
+          title: Level
+          default: ''
+        pattern_id:
+          type: string
+          maxLength: 256
+          title: Pattern Id
+          default: ''
+        similarity:
+          type: number
+          title: Similarity
+          default: 0.0
+        failure_type:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Failure Type
+        fields:
+          additionalProperties: true
+          type: object
+          title: Fields
+        model_family:
+          type: string
+          maxLength: 128
+          title: Model Family
+          default: ''
+        insight:
+          type: string
+          maxLength: 64000
+          title: Insight
+          default: ''
+        source_trace_id:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Source Trace Id
+      type: object
+      required:
+      - tier
+      title: ETraceItem
+      description: 'One retrieved pattern.
+
+
+        The SDK treats ``fields`` as the source of truth and feeds it to
+
+        ``reasonblocks.format_routing.render_pattern(tier, model, fields)``.
+
+        The legacy ``insight`` string is preserved only when a caller sends one
+
+        in from somewhere else — this server never populates it.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     TraceRetrieveRequest:
       properties:
         context:
@@ -486,6 +437,55 @@ components:
         and the server both normalize to lowercase ``e1``/``e2``/``e3``. ``tier``
 
         is the preferred field for new callers.'
+    StepPayload:
+      properties:
+        step_index:
+          type: integer
+          maximum: 10000.0
+          minimum: 0.0
+          title: Step Index
+        thought:
+          type: string
+          maxLength: 64000
+          title: Thought
+          default: ''
+        action:
+          anyOf:
+          - type: string
+            maxLength: 256
+          - type: 'null'
+          title: Action
+        action_input:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Action Input
+        observation:
+          anyOf:
+          - type: string
+            maxLength: 64000
+          - type: 'null'
+          title: Observation
+        difficulty:
+          type: number
+          title: Difficulty
+          default: 0.0
+        state:
+          type: string
+          maxLength: 32
+          title: State
+          default: INIT
+        tokens_used:
+          type: integer
+          minimum: 0.0
+          title: Tokens Used
+          default: 0
+      type: object
+      required:
+      - step_index
+      title: StepPayload
+      description: Legacy per-step shape posted by ``store_trace`` (pre-v2).
   securitySchemes:
     HTTPBearer:
       type: http

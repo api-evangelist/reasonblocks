@@ -47,6 +47,24 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    ScoreResponse:
+      properties:
+        difficulty:
+          type: number
+          title: Difficulty
+      type: object
+      required:
+      - difficulty
+      title: ScoreResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -73,24 +91,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ScoreResponse:
-      properties:
-        difficulty:
-          type: number
-          title: Difficulty
-      type: object
-      required:
-      - difficulty
-      title: ScoreResponse
     ScoreRequest:
       properties:
         text:

@@ -197,6 +197,26 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    PatternPatch:
+      properties:
+        fields:
+          additionalProperties: true
+          type: object
+          title: Fields
+      type: object
+      title: PatternPatch
+      description: 'Free-form payload patch. Whitelisted in the service to prevent
+
+        overwriting structural keys (``pattern_id``, ``tier``, ``customer_id``).'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -223,26 +243,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PatternPatch:
-      properties:
-        fields:
-          additionalProperties: true
-          type: object
-          title: Fields
-      type: object
-      title: PatternPatch
-      description: 'Free-form payload patch. Whitelisted in the service to prevent
-
-        overwriting structural keys (``pattern_id``, ``tier``, ``customer_id``).'
   securitySchemes:
     HTTPBearer:
       type: http
